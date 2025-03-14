@@ -4,9 +4,8 @@ A growing robot vacuum cleaner project, the goal is to build an open source robo
 
 ## The Origin
 
-This project is originally a course project at Brandeis University's Robotics Labs' class. But I think there are much more things beyond the scope inner class. So I took the development part that I developed and continue doing this project.
-
-The original cleaning robot project is based on ROS Noetic and Ubuntu20.04, and use some ROS packages to achieve exploration functions. I designed the cleaning functions, and use AMCL to localize. Now I am modifying some parts, and transfering them into ROS2, and would like to redesign the whole system. The new system in my opinion will have multi-agent collaborations, RL expansion space, etc.
+This project is originally derived from Brandeis University Robotics Lab's cleaning robot project, under the guidance of Professor Pito Salas. 
+- Origin version link: https://github.com/campusrover/cleaning_robot
 
 ## New SmartCleaningRobot Proposal
 
