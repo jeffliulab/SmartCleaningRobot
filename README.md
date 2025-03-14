@@ -4,7 +4,7 @@ A growing robot vacuum cleaner project, the goal is to build an open source robo
 
 ## The Origin
 
-This project is originally derived from Brandeis University Robotics Lab's cleaning robot project, under the guidance of Professor Pito Salas. 
+This project is originally derived from Brandeis University Robotics Lab's cleaning robot project, under the guidance of **Professor Pito Salas**. 
 - Origin version link: https://github.com/campusrover/cleaning_robot
 
 ## New SmartCleaningRobot Proposal
