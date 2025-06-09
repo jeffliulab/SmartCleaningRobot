@@ -408,7 +408,6 @@ Module Structures:
 
 ### **1. Panel Module**
 
-- **Developer**: Pang Liu
 - **Description**:
   - Self-designed GUI for controlling all program modules.
   - Provides buttons and voice control integration for seamless operation.
@@ -434,7 +433,6 @@ Module Structures:
 
 ### **2. Voice Control Module**
 
-- **Developer**: Pang Liu
 - **Description**:
   - Real-time voice recognition using the **Vosk model**.
   - Publishes recognized commands to the `voice_commands` topic.
@@ -443,7 +441,6 @@ Module Structures:
 
 ### **3. Mapping Module**
 
-- **Developer**: Zhenxu Chen
 - **Description**:
 
   - Based on the **Explore_Lite** package, customized for fast exploration and map saving.
@@ -484,21 +481,8 @@ Module Structures:
 
   - ![slam5](./CleaningRobot_Pictures/slam_5_saved_map_check.png)
 
-### **4-1. Cleaning Module I**
+### **4. Cleaning Module**
 
-- **Developer**: Zhenxu Chen
-- **Description**:
-  - Based on the **CCPP package** for full-coverage path planning and cleaning.
-  - Utilizes `move_base` for navigation.
-- Note: `<Cleaning Module I>` is developed at branch `backup`
-- CCPP Package: https://wiki.ros.org/full_coverage_path_planner
-  - The CCPP package will use saved map to plan a full coverage route and allow the robot following the route.
-  - Video: https://drive.google.com/file/d/1F1Hh0JKD9KMvRVsC_EX5ZwptzUVWLEi8/view?usp=drive_link
-  - ![ccpp](./CleaningRobot_Pictures/ccpp.png)
-
-### **4-2. Cleaning Module II**
-
-- **Developer**: Pang Liu
 - **Description**:
   - Fully self-designed cleaning functionality split into two submodules:
     - **Route Analysis Submodule**:
