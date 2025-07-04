@@ -2,23 +2,7 @@
 
 A growing robot vacuum cleaner project, the goal is to build an open source robot vacuum cleaner project for educational learning.
 
-## The Origin
-
-This project is originally derived from Brandeis University Robotics Lab's cleaning robot project, under the guidance of **Professor Pito Salas**. 
-- Origin version link: https://github.com/campusrover/cleaning_robot
-
-## New SmartCleaningRobot Proposal
-
-Based on previous work, in this new project, I will add following feature:
-* Intelligent Agent built in edge device, use Jetson Nano to increase the power.
-* DIY exploration and mapping module
-* Update cleaning module
-* New control panel based on phone
-* Connect with other IoT devices
-
-## Version 1 Introduction
-
-Followings are the main prospectives of my development part of previous version finished in school lab.
+## Key Features
 
 ### Key Features
 
@@ -35,371 +19,6 @@ This is a ROS-based autonomous cleaning robot that integrates indoor mapping, vo
 
 - Real Demo Link: https://youtu.be/zmo8CKolIh4?si=pPlF57XZn4DD5oo9
 - Sim Demo Link: https://youtu.be/rqXiXsVubhQ?si=3jIF6Q37Kqr45SRk
-
-### Problem Statement and Original Objectives
-
-**Background**
-
-With the rise of smart home technology, users now seek cleaning robots with greater autonomy and interactive capabilities beyond basic cleaning. Traditional cleaning robots face significant challenges in dynamic environments, such as avoiding obstacles or adapting to changes in the environment, and often lack the precision needed for complete coverage. This creates a gap in meeting user expectations for intelligent and efficient cleaning experiences.
-
-**Original Objectives**
-
-The project aims to develop a ROS-based cleaning robot that integrates autonomous exploration, complete coverage path planning (CCPP), and voice control. The following objectives were identified to address the problem:
-
-1. **Enable Autonomous Indoor Exploration and Mapping**: Utilize Simultaneous Localization and Mapping (SLAM) and Frontier-Based Exploration (FBE) algorithms to allow the robot to autonomously create a 2D map of an unknown environment.
-2. **Design Complete Coverage Path Planning (CCPP)**: Ensure the robot can cover all accessible areas without missing or re-cleaning spaces, achieving efficient and thorough cleaning.
-3. **Integrate Real-Time Obstacle Avoidance**: Equip the robot with the ability to detect and avoid dynamic obstacles, such as pedestrians, ensuring smooth and safe cleaning operations.
-4. **Build an Intelligent Interaction System**: Develop capabilities to adjust cleaning strategies based on user commands, such as stopping and returning to the base, continuing cleaning, or remapping the environment.
-5. **Establish an Expandable System Architecture**: Design the system to be scalable, with interfaces for future module expansions such as mobile app control and smart feedback systems.
-
-**Original Goal**
-
-The overarching goal is to create a smart autonomous cleaning robot that can:
-
-* Quickly explore and map the environment using SLAM and FBE algorithms.
-* Plan and execute efficient cleaning routes for complete coverage.
-* Recognize and respond to voice commands in real-time.
-* Detect and avoid dynamic obstacles during operation.
-
-This solution aims to overcome the limitations of traditional cleaning robots, providing users with a highly autonomous and interactive cleaning experience.
-
-## User Guide
-
-### **Program Entry**
-
-To start the program:
-
-1. **For Simulation**:
-
-  Remember to set localhost settings in ~/.bashrc
-
-```bash
-   roslaunch control_panel panel_sim.launch
-```
-
-  No additional commands are required for simulation environment, this launch file handles all controls.
-
-2. **For Real Robot**:
-
-  Remember to set real IP settings in ~/.bashrc and update turtlebot3's settings.
-
-  For Real Environment, you need to run roscore on PC firstly:
-
-```bash
-roscore
-```
-
-  Before bringup, if the environment has no Internet access, or no RTC module on turtlebot3, you need sync time.
-
-  For Real Environment, you need to ssh to turtlebot3 and bring up it secondly:
-
-```bash
-$ roslaunch turtlebot3_bringup turtlebot3_robot.launch
-```
-
-  After above instructions, you can now run the panel to start the program:
-
-```bash
-   roslaunch control_panel panel_real.launch
-```
-
-  After running, you must do following to avoid data loss or hardware damage:
-
-```bash
-sudo shutdown -h now
-```
-
-### Guide for build a test environment
-
-**This is also the environment of final demo at lab**
-
-For the final demonstration at lab, we will replicate a realistic cleaning scenario in a controlled environment. The setup ensures seamless communication and modular scalability, simulating a robust system for future multi-robot collaboration.
-
-**Hardware Configuration:**
-
-* TurtleBot3 (Cleaning Robot)
-  * Role: A single cleaning robot performing mapping, exploration, and cleaning tasks.
-  * Connectivity: Communicates with the central system via the router's local network.
-* No Internet Access Local Network Router (Network Center)
-  * Role: Acts as the network center to establish a local LAN for communication.
-  * Features: Provides stable IP addresses for devices, enabling consistent communication across the network.
-* Computer with Linux OS (Computing Center and Control Terminal):
-  * Role: Acts as the central computing tower and the portable control panel
-    * Running the GUI control panel, represents portable control panel
-    * Managing mapping, exploration, and cleaning processes
-    * Collecting and visualizing data in real-time.
-
-## Essential Algorithms (Self Designed)
-
-This part introduces the essential algorithms and techniques built by ourselves.
-
-### Core Algorithms in Route Plan
-
-The route planning in cleaning module II is implemented at a low level and without relying on move_base or other integrated ROS packages. This approach provides more flexibility and control over the cleaning coverage path. The main processing logic is:
-
-1. Map Preprocessing (Dilation Algorithm)
-2. Generate Sampling Points (Uniform Sampling)
-3. Find Valid Connections (Bresenham's Algorithm)
-4. Generate Complete Path (Greedy Algorithm)
-5. Visualization & Save (Arrow Path Visualization)
-
-***Note: The codes here are simplified and hide some lines to focus on algorithm ideas.***
-
-#### <1> Dilation Algorithm
-
-- Use the dilation algorithm to expand the obstacle area.
-- Calculate the safety distance based on the robot radius.
-- Convert the map into a three-value representation: -1 (obstacle), 0 (not visited), 1 (visited).
-
-```python
-def preprocess_map(self, map_array):
-    processed_map = np.full_like(map_array, MapData.OBSTACLE, dtype=np.int8)
-  
-    # Set feasible area
-    processed_map[map_array == 0] = MapData.UNVISITED
-  
-    # Expansion processing considering safety distance
-    safety_kernel_size = int(2.0 * self.robot_radius / self.grid_resolution)
-    safety_kernel = np.ones((safety_kernel_size, safety_kernel_size), np.uint8)
-  
-    # Inflate obstacles and mark safe areas
-    obstacle_map = (processed_map == MapData.OBSTACLE).astype(np.uint8)
-    dilated_obstacles = cv2.dilate(obstacle_map, safety_kernel, iterations=1)
-    processed_map[dilated_obstacles == 1] = MapData.OBSTACLE
-```
-
-#### <2> Uniform Sampling
-
-- Use a fixed interval to uniformly sample the feasible area.
-- Convert the sampling point coordinates from grid coordinates to world coordinates.
-- Assign a unique ID and status to each sampling point.
-
-```python
-def generate_path_points(self, processed_map):
-    path_points = []
-    height, width = processed_map.shape
-    point_id = 0
-  
-    # Generate waypoints using sampling interval
-    for x in range(0, width, self.SAMPLING_INTERVAL):
-        for y in range(0, height, self.SAMPLING_INTERVAL):
-            if processed_map[y, x] == MapData.UNVISITED:
-                world_x, world_y = self.grid_to_world(x, y)
-                path_points.append({
-                    'id': point_id,
-                    'grid_x': x, 'grid_y': y,
-                    'world_x': world_x, 'world_y': world_y,
-                    'status': MapData.UNVISITED
-                })
-                point_id += 1
-```
-
-#### <3> Bresenham's Algorithm
-
-- Use Bresenham algorithm to generate all grid points between two points.
-- Determine pixel position by error accumulation.
-- Only use integer operations to improve efficiency.
-
-```python
-def get_line_points(self, x1, y1, x2, y2):
-    points = []
-    dx = abs(x2 - x1)
-    dy = abs(y2 - y1)
-    x, y = x1, y1
-    sx = 1 if x1 < x2 else -1
-    sy = 1 if y1 < y2 else -1
-  
-    if dx > dy:
-        err = dx / 2.0
-        while x != x2:
-            points.append((x, y))
-            err -= dy
-            if err < 0:
-                y += sy
-                err += dx
-            x += sx
-```
-
-#### <4> Greedy Algorithm
-
-- Use a greedy strategy to select the next visit point.
-- Prioritize the nearest unvisited point.
-- Ensure that the path does not pass through obstacles.
-- Handle disconnected areas.
-
-```python
-def find_valid_connections(self, path_points):
-    connections = []
-    visited = set()
-    current_point = path_points[0]
-    visited.add(0)
-  
-    while len(visited) < len(path_points):
-        best_distance = float('inf')
-        best_next_point = None
-      
-        for i, point in enumerate(path_points):
-            if i in visited or not self.are_adjacent(current_point, point):
-                continue
-            if self.line_crosses_obstacle(current_point, point):
-                continue
-          
-            distance = ((current_point['grid_x'] - point['grid_x']) ** 2 + 
-                      (current_point['grid_y'] - point['grid_y']) ** 2) ** 0.5
-                    
-            if distance < best_distance:
-                best_distance = distance
-                best_next_point = point
-```
-
-#### <5> Arrow Path Visualization
-
-- Use heatmap to display map information.
-- Use vector calculation to generate arrow paths.
-- Use color mapping to display different states.
-- YAML serialization to save path data.
-
-```python
-def visualize_plan(self, processed_map, path_points):
-    display_map = np.full_like(processed_map, fill_value=1.0, dtype=float)
-    display_map[processed_map == MapData.OBSTACLE] = 0.8
-  
-    plt.imshow(display_map, cmap='gray')
-  
-    for point in path_points:
-        plt.scatter(point['grid_x'], point['grid_y'], c='red', s=30)
-  
-    connections = self.find_valid_connections(path_points)
-    for point1, point2 in connections:
-        plt.arrow(point1['grid_x'], point1['grid_y'],
-                 point2['grid_x'] - point1['grid_x'],
-                 point2['grid_y'] - point1['grid_y'],
-                 head_width=2, head_length=2, fc='blue', ec='blue', alpha=0.5)
-```
-
-### Core Algorithms in Route Follow
-
-**Process Flow**
-Initialization → Load Path Points → Start Route Following Loop:
-
-1. Check localization accuracy
-2. Find next target point:
-   - Priority: follow planned route order
-   - Fallback: find nearest accessible point
-3. Check path safety (obstacle avoidance)
-4. Move to target point:
-   - First rotate to target orientation
-   - Then move in straight line
-5. Update point status (visited/obstacle)
-6. Repeat loop until all points are completed
-
-**Special Features**
-
-1. State Machine
-
-- Uses enumerated states (UNVISITED/VISITED/OBSTACLE) for point tracking
-- Enables systematic progress monitoring and recovery
-
-2. Visualization Capabilities
-
-- Real-time display of point status and path connections
-- Color-coded visualization for different point states
-- Path visualization with directional indicators
-
-3. Real-time Safety Monitoring
-
-- Continuous LiDAR data processing for obstacle detection
-- Dynamic path adjustment for obstacle avoidance
-- Safety distance maintenance for pedestrian protection
-- Configurable safety parameters for different environments
-
-***Note: The codes here are simplified and hide some lines to focus on algorithm ideas.***
-
-#### <1> Localization Accuracy Check
-
-Verifies AMCL positioning accuracy to ensure reliable navigation.
-
-```python
-def check_localization_accuracy(self):
-    if not self.current_pose:
-        return False, "No pose data"
-    return True, "Localization accuracy sufficient"
-```
-
-#### <2> Target Point Finding
-
-Implements hierarchical point selection strategy - first tries planned route, then falls back to nearest accessible point.
-
-```python
-def get_next_planned_point(self, current_point_id):
-    for start_id, end_id in self.path_connections:
-        if start_id == current_point_id:
-            for point in self.path_points:
-                if point['id'] == end_id and point['status'] == MapData.UNVISITED:
-                    if self.check_path_safety(point) and self.is_point_reachable(point):
-                        return point
-    return None
-```
-
-#### <3> Path Safety Verification
-
-Uses LiDAR data to validate path safety by checking obstacle proximity.
-
-```python
-def check_path_safety(self, target_point):
-    path_start = np.array([self.current_pose[0], self.current_pose[1]])
-    path_end = np.array([target_point['world_x'], target_point['world_y']])
-    path_vector = path_end - path_start
-  
-    danger_points = 0
-    for obs_point in self.obstacle_points:
-        obs_vector = np.array(obs_point) - path_start
-        projection = np.dot(obs_vector, path_vector) / np.linalg.norm(path_vector)
-        if 0 <= projection <= np.linalg.norm(path_vector):
-            distance = abs(np.cross(path_vector, obs_vector)) / np.linalg.norm(path_vector)
-            if distance < self.SAFETY_DISTANCE:
-                danger_points += 1
-                if danger_points > 5:
-                    return False
-    return True
-```
-
-#### <4> Reachability Check
-
-Determines if target point is within maximum reachable distance.
-
-```python
-def is_point_reachable(self, point):
-    distance = math.hypot(
-        point['world_x'] - self.current_pose[0],
-        point['world_y'] - self.current_pose[1]
-    )
-    return distance < self.MAX_REACHABLE_DISTANCE
-```
-
-#### <5> Movement Control
-
-Implements two-phase movement: rotation alignment followed by linear motion.
-
-```python
-def move_to_point(self, target_point):
-    while not rospy.is_shutdown():
-        dx = target_point['world_x'] - self.current_pose[0]
-        dy = target_point['world_y'] - self.current_pose[1]
-        distance = math.hypot(dx, dy)
-        target_angle = math.atan2(dy, dx)
-      
-        if distance < self.POSITION_TOLERANCE:
-            self.stop_robot()
-            return True
-          
-        angle_diff = target_angle - self.current_pose[2]
-        if abs(angle_diff) > self.ANGLE_TOLERANCE:
-            cmd_vel.angular.z = self.ANGULAR_SPEED if angle_diff > 0 else -self.ANGULAR_SPEED
-        else:
-            cmd_vel.linear.x = min(self.LINEAR_SPEED, distance)
-            cmd_vel.angular.z = 0.5 * angle_diff
-```
 
 ## Essential Modules
 
@@ -600,6 +219,389 @@ I build a turtlebot3 and install a logi USB camera on it. The image processing i
 
 ***The turtlebot3 I built:***
 ![turtlebot3](./CleaningRobot_Pictures/turtlebot3_built.png)
+
+## User Guide
+
+### **Program Entry**
+
+To start the program:
+
+1. **For Simulation**:
+
+  Remember to set localhost settings in ~/.bashrc
+
+```bash
+   roslaunch control_panel panel_sim.launch
+```
+
+  No additional commands are required for simulation environment, this launch file handles all controls.
+
+2. **For Real Robot**:
+
+  Remember to set real IP settings in ~/.bashrc and update turtlebot3's settings.
+
+  For Real Environment, you need to run roscore on PC firstly:
+
+```bash
+roscore
+```
+
+  Before bringup, if the environment has no Internet access, or no RTC module on turtlebot3, you need sync time.
+
+  For Real Environment, you need to ssh to turtlebot3 and bring up it secondly:
+
+```bash
+$ roslaunch turtlebot3_bringup turtlebot3_robot.launch
+```
+
+  After above instructions, you can now run the panel to start the program:
+
+```bash
+   roslaunch control_panel panel_real.launch
+```
+
+  After running, you must do following to avoid data loss or hardware damage:
+
+```bash
+sudo shutdown -h now
+```
+
+### Guide for build a test environment
+
+**This is also the environment of final demo at lab**
+
+For the final demonstration at lab, we will replicate a realistic cleaning scenario in a controlled environment. The setup ensures seamless communication and modular scalability, simulating a robust system for future multi-robot collaboration.
+
+**Hardware Configuration:**
+
+* TurtleBot3 (Cleaning Robot)
+  * Role: A single cleaning robot performing mapping, exploration, and cleaning tasks.
+  * Connectivity: Communicates with the central system via the router's local network.
+* No Internet Access Local Network Router (Network Center)
+  * Role: Acts as the network center to establish a local LAN for communication.
+  * Features: Provides stable IP addresses for devices, enabling consistent communication across the network.
+* Computer with Linux OS (Computing Center and Control Terminal):
+  * Role: Acts as the central computing tower and the portable control panel
+    * Running the GUI control panel, represents portable control panel
+    * Managing mapping, exploration, and cleaning processes
+    * Collecting and visualizing data in real-time.
+
+## Essential Algorithms (Self Designed)
+
+This part introduces the essential algorithms and techniques built by ourselves.
+
+### Core Algorithms in Route Plan
+
+The route planning in cleaning module II is implemented at a low level and without relying on move_base or other integrated ROS packages. This approach provides more flexibility and control over the cleaning coverage path. The main processing logic is:
+
+1. Map Preprocessing (Dilation Algorithm)
+2. Generate Sampling Points (Uniform Sampling)
+3. Find Valid Connections (Bresenham's Algorithm)
+4. Generate Complete Path (Greedy Algorithm)
+5. Visualization & Save (Arrow Path Visualization)
+
+***Note: The codes here are simplified and hide some lines to focus on algorithm ideas.***
+
+#### <1> Dilation Algorithm
+
+- Use the dilation algorithm to expand the obstacle area.
+- Calculate the safety distance based on the robot radius.
+- Convert the map into a three-value representation: -1 (obstacle), 0 (not visited), 1 (visited).
+
+```python
+def preprocess_map(self, map_array):
+    processed_map = np.full_like(map_array, MapData.OBSTACLE, dtype=np.int8)
+  
+    # Set feasible area
+    processed_map[map_array == 0] = MapData.UNVISITED
+  
+    # Expansion processing considering safety distance
+    safety_kernel_size = int(2.0 * self.robot_radius / self.grid_resolution)
+    safety_kernel = np.ones((safety_kernel_size, safety_kernel_size), np.uint8)
+  
+    # Inflate obstacles and mark safe areas
+    obstacle_map = (processed_map == MapData.OBSTACLE).astype(np.uint8)
+    dilated_obstacles = cv2.dilate(obstacle_map, safety_kernel, iterations=1)
+    processed_map[dilated_obstacles == 1] = MapData.OBSTACLE
+```
+
+#### <2> Uniform Sampling
+
+- Use a fixed interval to uniformly sample the feasible area.
+- Convert the sampling point coordinates from grid coordinates to world coordinates.
+- Assign a unique ID and status to each sampling point.
+
+```python
+def generate_path_points(self, processed_map):
+    path_points = []
+    height, width = processed_map.shape
+    point_id = 0
+  
+    # Generate waypoints using sampling interval
+    for x in range(0, width, self.SAMPLING_INTERVAL):
+        for y in range(0, height, self.SAMPLING_INTERVAL):
+            if processed_map[y, x] == MapData.UNVISITED:
+                world_x, world_y = self.grid_to_world(x, y)
+                path_points.append({
+                    'id': point_id,
+                    'grid_x': x, 'grid_y': y,
+                    'world_x': world_x, 'world_y': world_y,
+                    'status': MapData.UNVISITED
+                })
+                point_id += 1
+```
+
+#### <3> Bresenham's Algorithm
+
+- Use Bresenham algorithm to generate all grid points between two points.
+- Determine pixel position by error accumulation.
+- Only use integer operations to improve efficiency.
+
+```python
+def get_line_points(self, x1, y1, x2, y2):
+    points = []
+    dx = abs(x2 - x1)
+    dy = abs(y2 - y1)
+    x, y = x1, y1
+    sx = 1 if x1 < x2 else -1
+    sy = 1 if y1 < y2 else -1
+  
+    if dx > dy:
+        err = dx / 2.0
+        while x != x2:
+            points.append((x, y))
+            err -= dy
+            if err < 0:
+                y += sy
+                err += dx
+            x += sx
+```
+
+#### <4> Greedy Algorithm
+
+- Use a greedy strategy to select the next visit point.
+- Prioritize the nearest unvisited point.
+- Ensure that the path does not pass through obstacles.
+- Handle disconnected areas.
+
+```python
+def find_valid_connections(self, path_points):
+    connections = []
+    visited = set()
+    current_point = path_points[0]
+    visited.add(0)
+  
+    while len(visited) < len(path_points):
+        best_distance = float('inf')
+        best_next_point = None
+  
+        for i, point in enumerate(path_points):
+            if i in visited or not self.are_adjacent(current_point, point):
+                continue
+            if self.line_crosses_obstacle(current_point, point):
+                continue
+  
+            distance = ((current_point['grid_x'] - point['grid_x']) ** 2 + 
+                      (current_point['grid_y'] - point['grid_y']) ** 2) ** 0.5
+            
+            if distance < best_distance:
+                best_distance = distance
+                best_next_point = point
+```
+
+#### <5> Arrow Path Visualization
+
+- Use heatmap to display map information.
+- Use vector calculation to generate arrow paths.
+- Use color mapping to display different states.
+- YAML serialization to save path data.
+
+```python
+def visualize_plan(self, processed_map, path_points):
+    display_map = np.full_like(processed_map, fill_value=1.0, dtype=float)
+    display_map[processed_map == MapData.OBSTACLE] = 0.8
+  
+    plt.imshow(display_map, cmap='gray')
+  
+    for point in path_points:
+        plt.scatter(point['grid_x'], point['grid_y'], c='red', s=30)
+  
+    connections = self.find_valid_connections(path_points)
+    for point1, point2 in connections:
+        plt.arrow(point1['grid_x'], point1['grid_y'],
+                 point2['grid_x'] - point1['grid_x'],
+                 point2['grid_y'] - point1['grid_y'],
+                 head_width=2, head_length=2, fc='blue', ec='blue', alpha=0.5)
+```
+
+### Core Algorithms in Route Follow
+
+**Process Flow**
+Initialization → Load Path Points → Start Route Following Loop:
+
+1. Check localization accuracy
+2. Find next target point:
+   - Priority: follow planned route order
+   - Fallback: find nearest accessible point
+3. Check path safety (obstacle avoidance)
+4. Move to target point:
+   - First rotate to target orientation
+   - Then move in straight line
+5. Update point status (visited/obstacle)
+6. Repeat loop until all points are completed
+
+**Special Features**
+
+1. State Machine
+
+- Uses enumerated states (UNVISITED/VISITED/OBSTACLE) for point tracking
+- Enables systematic progress monitoring and recovery
+
+2. Visualization Capabilities
+
+- Real-time display of point status and path connections
+- Color-coded visualization for different point states
+- Path visualization with directional indicators
+
+3. Real-time Safety Monitoring
+
+- Continuous LiDAR data processing for obstacle detection
+- Dynamic path adjustment for obstacle avoidance
+- Safety distance maintenance for pedestrian protection
+- Configurable safety parameters for different environments
+
+***Note: The codes here are simplified and hide some lines to focus on algorithm ideas.***
+
+#### <1> Localization Accuracy Check
+
+Verifies AMCL positioning accuracy to ensure reliable navigation.
+
+```python
+def check_localization_accuracy(self):
+    if not self.current_pose:
+        return False, "No pose data"
+    return True, "Localization accuracy sufficient"
+```
+
+#### <2> Target Point Finding
+
+Implements hierarchical point selection strategy - first tries planned route, then falls back to nearest accessible point.
+
+```python
+def get_next_planned_point(self, current_point_id):
+    for start_id, end_id in self.path_connections:
+        if start_id == current_point_id:
+            for point in self.path_points:
+                if point['id'] == end_id and point['status'] == MapData.UNVISITED:
+                    if self.check_path_safety(point) and self.is_point_reachable(point):
+                        return point
+    return None
+```
+
+#### <3> Path Safety Verification
+
+Uses LiDAR data to validate path safety by checking obstacle proximity.
+
+```python
+def check_path_safety(self, target_point):
+    path_start = np.array([self.current_pose[0], self.current_pose[1]])
+    path_end = np.array([target_point['world_x'], target_point['world_y']])
+    path_vector = path_end - path_start
+  
+    danger_points = 0
+    for obs_point in self.obstacle_points:
+        obs_vector = np.array(obs_point) - path_start
+        projection = np.dot(obs_vector, path_vector) / np.linalg.norm(path_vector)
+        if 0 <= projection <= np.linalg.norm(path_vector):
+            distance = abs(np.cross(path_vector, obs_vector)) / np.linalg.norm(path_vector)
+            if distance < self.SAFETY_DISTANCE:
+                danger_points += 1
+                if danger_points > 5:
+                    return False
+    return True
+```
+
+#### <4> Reachability Check
+
+Determines if target point is within maximum reachable distance.
+
+```python
+def is_point_reachable(self, point):
+    distance = math.hypot(
+        point['world_x'] - self.current_pose[0],
+        point['world_y'] - self.current_pose[1]
+    )
+    return distance < self.MAX_REACHABLE_DISTANCE
+```
+
+#### <5> Movement Control
+
+Implements two-phase movement: rotation alignment followed by linear motion.
+
+```python
+def move_to_point(self, target_point):
+    while not rospy.is_shutdown():
+        dx = target_point['world_x'] - self.current_pose[0]
+        dy = target_point['world_y'] - self.current_pose[1]
+        distance = math.hypot(dx, dy)
+        target_angle = math.atan2(dy, dx)
+  
+        if distance < self.POSITION_TOLERANCE:
+            self.stop_robot()
+            return True
+  
+        angle_diff = target_angle - self.current_pose[2]
+        if abs(angle_diff) > self.ANGLE_TOLERANCE:
+            cmd_vel.angular.z = self.ANGULAR_SPEED if angle_diff > 0 else -self.ANGULAR_SPEED
+        else:
+            cmd_vel.linear.x = min(self.LINEAR_SPEED, distance)
+            cmd_vel.angular.z = 0.5 * angle_diff
+```
+
+## Development History and Future Plans
+
+### Problem Statement and Original Objectives
+
+**Background**
+
+With the rise of smart home technology, users now seek cleaning robots with greater autonomy and interactive capabilities beyond basic cleaning. Traditional cleaning robots face significant challenges in dynamic environments, such as avoiding obstacles or adapting to changes in the environment, and often lack the precision needed for complete coverage. This creates a gap in meeting user expectations for intelligent and efficient cleaning experiences.
+
+**Original Objectives**
+
+The project aims to develop a ROS-based cleaning robot that integrates autonomous exploration, complete coverage path planning (CCPP), and voice control. The following objectives were identified to address the problem:
+
+1. **Enable Autonomous Indoor Exploration and Mapping**: Utilize Simultaneous Localization and Mapping (SLAM) and Frontier-Based Exploration (FBE) algorithms to allow the robot to autonomously create a 2D map of an unknown environment.
+2. **Design Complete Coverage Path Planning (CCPP)**: Ensure the robot can cover all accessible areas without missing or re-cleaning spaces, achieving efficient and thorough cleaning.
+3. **Integrate Real-Time Obstacle Avoidance**: Equip the robot with the ability to detect and avoid dynamic obstacles, such as pedestrians, ensuring smooth and safe cleaning operations.
+4. **Build an Intelligent Interaction System**: Develop capabilities to adjust cleaning strategies based on user commands, such as stopping and returning to the base, continuing cleaning, or remapping the environment.
+5. **Establish an Expandable System Architecture**: Design the system to be scalable, with interfaces for future module expansions such as mobile app control and smart feedback systems.
+
+**Original Goal**
+
+The overarching goal is to create a smart autonomous cleaning robot that can:
+
+* Quickly explore and map the environment using SLAM and FBE algorithms.
+* Plan and execute efficient cleaning routes for complete coverage.
+* Recognize and respond to voice commands in real-time.
+* Detect and avoid dynamic obstacles during operation.
+
+This solution aims to overcome the limitations of traditional cleaning robots, providing users with a highly autonomous and interactive cleaning experience.
+
+### First-stage Development
+
+This project is originally derived from Brandeis University Robotics Lab's cleaning robot project, under the guidance of **Professor Pito Salas**.
+
+- Origin version link: https://github.com/campusrover/cleaning_robot
+
+### Future Plans
+
+Based on previous work, in this new project, I will add following feature:
+
+* Intelligent Agent built in edge device, use Jetson Nano to increase the power.
+* DIY exploration and mapping module
+* Update cleaning module
+* New control panel based on phone
+* Connect with other IoT devices
 
 ## Relevant Literature and References
 
