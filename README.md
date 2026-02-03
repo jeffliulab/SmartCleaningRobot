@@ -4,36 +4,38 @@ A growing robot vacuum cleaner project, the goal is to build an open source robo
 
 ## Brief Introduction and Versions
 
-I am currently migrating the project to ROS Humble and adding features such as reinforcement learning; the original ROS Noetic version has been fully migrated to the `noetic` branch.
+I am currently rebuilding the project to explore deeper in AI applications on cleaning robot, and adding features such as reinforcement learning; the original ROS Noetic version has been fully migrated to the [noetic branch](https://github.com/jeffliulab/SmartCleaningRobot/tree/noetic). See details in following introductions.
 
-Previous Noetic Version Demos: (including exploration, mapping, cleaning, ..)
+### Main Branch (ROS Humble & Isaac Lab)
+
+To explore deeper in Reinforcement Learning, I create this whole new main branch in ROS Humble, with Isaac Lab and Isaac Sim.
+
+### ROS Noetic Branch (Origin System)
+
+Noetic branch is based on ROS Noetic, Gazebo, RViz, and traditional control algorithms. You can find details in [noetic branch](https://github.com/jeffliulab/SmartCleaningRobot/tree/noetic).
+
+Noetic Version Demos: (including exploration, mapping, cleaning, ..)
 
 - Real Demo Link: https://youtu.be/zmo8CKolIh4?si=pPlF57XZn4DD5oo9
 - Sim Demo Link: https://youtu.be/rqXiXsVubhQ?si=3jIF6Q37Kqr45SRk
 
 <img src="./docs/noetic/modules.png" width="600">
 
-## Modules
-
-### Mapping
+Mapping:
 
 <img src="./docs/noetic/slam_3_explore2.png" width="600">
-
-<img src="./docs/noetic/slam_3_explore3.png" width="600">
 
 Control Panel:
 
 <img src="./docs/noetic/control_panel_gui.png" width="400">
 
-### Planning
+Planning:
 
 <img src="./docs/noetic/route_analysis_2.png" width="400">
 
 <img src="./docs/noetic/route_analysis_4.png" width="400">
 
-### Sim2Real
-
-The strategy and development in Simulation (Gazebo) has been implemented on Raspberry Pi based hardware platform:
+Hardware Platform:
 
 <img src="./docs/noetic/turtlebot3_built.png" width="400">
 
