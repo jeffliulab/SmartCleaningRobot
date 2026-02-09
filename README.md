@@ -8,7 +8,7 @@ I am currently rebuilding the project to explore deeper in AI applications on cl
 
 ### Main Branch (ROS Humble & Isaac Lab)
 
-To explore deeper in Reinforcement Learning, I create this whole new main branch in ROS Humble, with Isaac Lab and Isaac Sim.
+To explore deeper in Reinforcement Learning, I create this whole new main branch in ROS Humble, with Isaac Lab, to explore reinforcement learning in cleaning robot tasks.
 
 ### ROS Noetic Branch (Origin System)
 
@@ -38,6 +38,24 @@ Planning:
 Hardware Platform:
 
 <img src="./docs/noetic/turtlebot3_built.png" width="400">
+
+### Smart Glove Branch
+
+This is a branch ([repo: SmartGlove](https://github.com/jeffliulab/SmartGlove?tab=readme-ov-file)) focus on smart glove, which can control robot arm and experimentally connect into a self-designed IoT platform.
+
+<img src="./docs/robot_arm/1751419760912.png" width="400">
+
+Hardware implementations:
+
+<img src="./docs/robot_arm/framework.png" width="400">
+
+ROS topics:
+
+<img src="./docs/robot_arm/ros.png" width="400">
+
+Robot arm:
+
+<img src="./docs/robot_arm/1751419900912.png" width="400">
 
 ## Furthermore
 
