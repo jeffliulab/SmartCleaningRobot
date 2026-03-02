@@ -83,4 +83,5 @@ tests/
 coverage_maps/
 
 # SELF-FILES
-自用说明书.md
+自用说明书_train.md
+自用说明书_deployment.md

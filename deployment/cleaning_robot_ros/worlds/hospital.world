@@ -1,0 +1,337 @@
+<?xml version="1.0"?>
+<!--
+  Hospital environment for Gazebo.
+  Matches training scene: 30m x 30m, multi-room with corridors.
+  Scene bounds: (-15, -15) to (15, 15) — same as scene_cfg.py HOSPITAL_SCENE.
+-->
+<sdf version="1.6">
+  <world name="hospital">
+
+    <include><uri>model://ground_plane</uri></include>
+    <include><uri>model://sun</uri></include>
+
+    <physics type="ode">
+      <real_time_factor>1</real_time_factor>
+      <max_step_size>0.001</max_step_size>
+    </physics>
+
+    <!-- ============ Outer Walls (30m x 30m) ============ -->
+    <model name="wall_north">
+      <static>true</static>
+      <pose>0 15 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>30.4 0.2 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>30.4 0.2 2.5</size></box></geometry>
+          <material><ambient>0.92 0.92 0.90 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="wall_south">
+      <static>true</static>
+      <pose>0 -15 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>30.4 0.2 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>30.4 0.2 2.5</size></box></geometry>
+          <material><ambient>0.92 0.92 0.90 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="wall_east">
+      <static>true</static>
+      <pose>15 0 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.2 30.4 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.2 30.4 2.5</size></box></geometry>
+          <material><ambient>0.92 0.92 0.90 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="wall_west">
+      <static>true</static>
+      <pose>-15 0 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.2 30.4 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.2 30.4 2.5</size></box></geometry>
+          <material><ambient>0.92 0.92 0.90 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <!-- ============ Main Corridor (east-west, y = -2 to 2) ============ -->
+
+    <!-- North corridor wall at y=2 — three segments with two door gaps -->
+    <model name="corr_n_left">
+      <static>true</static>
+      <pose>-10 2 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>10 0.15 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>10 0.15 2.5</size></box></geometry>
+          <material><ambient>0.85 0.90 0.85 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="corr_n_mid">
+      <static>true</static>
+      <pose>1 2 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>6 0.15 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>6 0.15 2.5</size></box></geometry>
+          <material><ambient>0.85 0.90 0.85 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="corr_n_right">
+      <static>true</static>
+      <pose>10 2 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>10 0.15 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>10 0.15 2.5</size></box></geometry>
+          <material><ambient>0.85 0.90 0.85 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <!-- South corridor wall at y=-2 — mirror of north -->
+    <model name="corr_s_left">
+      <static>true</static>
+      <pose>-10 -2 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>10 0.15 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>10 0.15 2.5</size></box></geometry>
+          <material><ambient>0.85 0.90 0.85 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="corr_s_mid">
+      <static>true</static>
+      <pose>1 -2 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>6 0.15 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>6 0.15 2.5</size></box></geometry>
+          <material><ambient>0.85 0.90 0.85 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="corr_s_right">
+      <static>true</static>
+      <pose>10 -2 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>10 0.15 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>10 0.15 2.5</size></box></geometry>
+          <material><ambient>0.85 0.90 0.85 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <!-- ============ North-side Room Dividers ============ -->
+
+    <!-- Vertical wall at x=-5, north wing (y 2→15) with door gap y 4→6 -->
+    <model name="div_n1_lower">
+      <static>true</static>
+      <pose>-5 3 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.15 2 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.15 2 2.5</size></box></geometry>
+          <material><ambient>0.92 0.92 0.90 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="div_n1_upper">
+      <static>true</static>
+      <pose>-5 10.5 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.15 9 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.15 9 2.5</size></box></geometry>
+          <material><ambient>0.92 0.92 0.90 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <!-- Vertical wall at x=5, north wing — with door gap y 4→6 -->
+    <model name="div_n2_lower">
+      <static>true</static>
+      <pose>5 3 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.15 2 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.15 2 2.5</size></box></geometry>
+          <material><ambient>0.92 0.92 0.90 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="div_n2_upper">
+      <static>true</static>
+      <pose>5 10.5 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.15 9 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.15 9 2.5</size></box></geometry>
+          <material><ambient>0.92 0.92 0.90 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <!-- Horizontal cross wall at y=9, north wing — two segments (door gap x -1→1) -->
+    <model name="cross_n_left">
+      <static>true</static>
+      <pose>-8 9 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>14 0.15 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>14 0.15 2.5</size></box></geometry>
+          <material><ambient>0.92 0.92 0.90 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="cross_n_right">
+      <static>true</static>
+      <pose>8 9 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>14 0.15 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>14 0.15 2.5</size></box></geometry>
+          <material><ambient>0.92 0.92 0.90 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <!-- ============ South-side Room Dividers (mirror) ============ -->
+
+    <model name="div_s1_upper">
+      <static>true</static>
+      <pose>-5 -3 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.15 2 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.15 2 2.5</size></box></geometry>
+          <material><ambient>0.92 0.92 0.90 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="div_s1_lower">
+      <static>true</static>
+      <pose>-5 -10.5 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.15 9 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.15 9 2.5</size></box></geometry>
+          <material><ambient>0.92 0.92 0.90 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="div_s2_upper">
+      <static>true</static>
+      <pose>5 -3 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.15 2 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.15 2 2.5</size></box></geometry>
+          <material><ambient>0.92 0.92 0.90 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="div_s2_lower">
+      <static>true</static>
+      <pose>5 -10.5 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.15 9 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.15 9 2.5</size></box></geometry>
+          <material><ambient>0.92 0.92 0.90 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="cross_s_left">
+      <static>true</static>
+      <pose>-8 -9 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>14 0.15 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>14 0.15 2.5</size></box></geometry>
+          <material><ambient>0.92 0.92 0.90 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="cross_s_right">
+      <static>true</static>
+      <pose>8 -9 1.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>14 0.15 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>14 0.15 2.5</size></box></geometry>
+          <material><ambient>0.92 0.92 0.90 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <!-- ============ Furniture / Obstacles ============ -->
+
+    <!-- Patient beds (north wing rooms) -->
+    <model name="bed_nw">
+      <static>true</static>
+      <pose>-10 5.5 0.35 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>2.0 0.9 0.7</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>2.0 0.9 0.7</size></box></geometry>
+          <material><ambient>0.6 0.75 0.85 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="bed_ne">
+      <static>true</static>
+      <pose>10 5.5 0.35 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>2.0 0.9 0.7</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>2.0 0.9 0.7</size></box></geometry>
+          <material><ambient>0.6 0.75 0.85 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="bed_nw_upper">
+      <static>true</static>
+      <pose>-10 12 0.35 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>2.0 0.9 0.7</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>2.0 0.9 0.7</size></box></geometry>
+          <material><ambient>0.6 0.75 0.85 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="bed_ne_upper">
+      <static>true</static>
+      <pose>10 12 0.35 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>2.0 0.9 0.7</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>2.0 0.9 0.7</size></box></geometry>
+          <material><ambient>0.6 0.75 0.85 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <!-- Patient beds (south wing rooms) -->
+    <model name="bed_sw">
+      <static>true</static>
+      <pose>-10 -5.5 0.35 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>2.0 0.9 0.7</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>2.0 0.9 0.7</size></box></geometry>
+          <material><ambient>0.6 0.75 0.85 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="bed_se">
+      <static>true</static>
+      <pose>10 -5.5 0.35 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>2.0 0.9 0.7</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>2.0 0.9 0.7</size></box></geometry>
+          <material><ambient>0.6 0.75 0.85 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <!-- Nurse station (corridor) -->
+    <model name="nurse_desk">
+      <static>true</static>
+      <pose>-3 0 0.45 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>1.5 0.7 0.9</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>1.5 0.7 0.9</size></box></geometry>
+          <material><ambient>0.55 0.40 0.30 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <!-- Medical equipment cart -->
+    <model name="cart">
+      <static>true</static>
+      <pose>7 0 0.4 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.6 0.4 0.8</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.6 0.4 0.8</size></box></geometry>
+          <material><ambient>0.7 0.7 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>

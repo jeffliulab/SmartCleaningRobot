@@ -1,0 +1,241 @@
+<?xml version="1.0"?>
+<!--
+  JetBot URDF for Gazebo deployment.
+
+  Matches the Isaac Lab training configuration:
+    - Differential drive (wheel_radius=0.0325m, wheel_separation=0.118m)
+    - 360-ray LiDAR (3.5m max range)
+    - Front-facing RGB camera (640x480)
+
+  Gazebo plugins:
+    - libgazebo_ros_diff_drive.so   → /cmd_vel, /odom
+    - libgazebo_ros_ray_sensor.so   → /scan
+    - libgazebo_ros_camera.so       → /front_camera/image_raw
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="jetbot">
+
+  <xacro:property name="PI" value="3.14159265359"/>
+
+  <!-- Must match training config in robots/jetbot.py -->
+  <xacro:property name="wheel_radius" value="0.0325"/>
+  <xacro:property name="wheel_width"  value="0.018"/>
+  <xacro:property name="wheel_sep"    value="0.118"/>
+
+  <xacro:property name="chassis_l" value="0.14"/>
+  <xacro:property name="chassis_w" value="0.10"/>
+  <xacro:property name="chassis_h" value="0.045"/>
+  <xacro:property name="chassis_z" value="${wheel_radius + chassis_h / 2.0}"/>
+
+  <xacro:property name="caster_r" value="0.008"/>
+
+  <!-- ==================== base ==================== -->
+  <link name="base_footprint"/>
+
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child  link="base_link"/>
+    <origin xyz="0 0 ${chassis_z}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="base_link">
+    <visual>
+      <geometry><box size="${chassis_l} ${chassis_w} ${chassis_h}"/></geometry>
+      <material name="dark_grey"><color rgba="0.2 0.2 0.2 1"/></material>
+    </visual>
+    <collision>
+      <geometry><box size="${chassis_l} ${chassis_w} ${chassis_h}"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.6"/>
+      <inertia ixx="5e-4" ixy="0" ixz="0" iyy="8e-4" iyz="0" izz="8e-4"/>
+    </inertial>
+  </link>
+
+  <!-- ==================== wheel macro ==================== -->
+  <xacro:macro name="wheel" params="prefix y_reflect">
+    <joint name="${prefix}_wheel_joint" type="continuous">
+      <parent link="base_link"/>
+      <child  link="${prefix}_wheel_link"/>
+      <origin xyz="0 ${y_reflect * wheel_sep / 2.0} ${-chassis_h / 2.0}"
+              rpy="${-PI / 2.0} 0 0"/>
+      <axis xyz="0 0 1"/>
+      <dynamics friction="0.1" damping="0.01"/>
+    </joint>
+
+    <link name="${prefix}_wheel_link">
+      <visual>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+        <material name="black"><color rgba="0.1 0.1 0.1 1"/></material>
+      </visual>
+      <collision>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+      </collision>
+      <inertial>
+        <mass value="0.04"/>
+        <inertia ixx="1e-5" ixy="0" ixz="0" iyy="1e-5" iyz="0" izz="1e-5"/>
+      </inertial>
+    </link>
+
+    <gazebo reference="${prefix}_wheel_link">
+      <mu1>1.0</mu1>
+      <mu2>1.0</mu2>
+      <kp>1e6</kp>
+      <kd>100</kd>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:wheel prefix="left"  y_reflect="1"/>
+  <xacro:wheel prefix="right" y_reflect="-1"/>
+
+  <!-- ==================== front caster ==================== -->
+  <joint name="caster_joint" type="fixed">
+    <parent link="base_link"/>
+    <child  link="caster_link"/>
+    <origin xyz="${chassis_l / 2.0 - caster_r * 2.0} 0 ${-chassis_h / 2.0 - caster_r}"
+            rpy="0 0 0"/>
+  </joint>
+
+  <link name="caster_link">
+    <visual>
+      <geometry><sphere radius="${caster_r}"/></geometry>
+      <material name="grey"><color rgba="0.5 0.5 0.5 1"/></material>
+    </visual>
+    <collision>
+      <geometry><sphere radius="${caster_r}"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+
+  <gazebo reference="caster_link">
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+
+  <!-- ==================== LiDAR ==================== -->
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child  link="lidar_link"/>
+    <origin xyz="0 0 ${chassis_h / 2.0 + 0.015}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="lidar_link">
+    <visual>
+      <geometry><cylinder radius="0.02" length="0.015"/></geometry>
+      <material name="red"><color rgba="0.8 0.1 0.1 1"/></material>
+    </visual>
+    <inertial>
+      <mass value="0.02"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+
+  <gazebo reference="lidar_link">
+    <sensor name="lidar" type="ray">
+      <always_on>true</always_on>
+      <visualize>true</visualize>
+      <update_rate>10</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>360</samples>
+            <resolution>1</resolution>
+            <min_angle>0</min_angle>
+            <max_angle>${2.0 * PI}</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.08</min>
+          <max>3.5</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0</mean>
+          <stddev>0.005</stddev>
+        </noise>
+      </ray>
+      <plugin name="laser_scan" filename="libgazebo_ros_ray_sensor.so">
+        <ros><namespace>/</namespace></ros>
+        <output_type>sensor_msgs/LaserScan</output_type>
+        <topic_name>scan</topic_name>
+        <frame_name>lidar_link</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <!-- ==================== front camera ==================== -->
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child  link="camera_link"/>
+    <origin xyz="${chassis_l / 2.0} 0 ${chassis_h / 4.0}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="camera_link">
+    <visual>
+      <geometry><box size="0.02 0.04 0.02"/></geometry>
+      <material name="blue"><color rgba="0.1 0.1 0.8 1"/></material>
+    </visual>
+    <inertial>
+      <mass value="0.01"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child  link="camera_optical_link"/>
+    <origin xyz="0 0 0" rpy="${-PI / 2.0} 0 ${-PI / 2.0}"/>
+  </joint>
+
+  <link name="camera_optical_link"/>
+
+  <gazebo reference="camera_link">
+    <sensor name="camera" type="camera">
+      <always_on>true</always_on>
+      <visualize>false</visualize>
+      <update_rate>10</update_rate>
+      <camera>
+        <horizontal_fov>1.047</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>100</far>
+        </clip>
+      </camera>
+      <plugin name="camera_driver" filename="libgazebo_ros_camera.so">
+        <ros><namespace>/</namespace></ros>
+        <camera_name>front_camera</camera_name>
+        <frame_name>camera_optical_link</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <!-- ==================== Gazebo diff-drive ==================== -->
+  <gazebo>
+    <plugin name="diff_drive" filename="libgazebo_ros_diff_drive.so">
+      <ros><namespace>/</namespace></ros>
+      <left_joint>left_wheel_joint</left_joint>
+      <right_joint>right_wheel_joint</right_joint>
+      <wheel_separation>${wheel_sep}</wheel_separation>
+      <wheel_diameter>${wheel_radius * 2.0}</wheel_diameter>
+      <max_wheel_torque>0.5</max_wheel_torque>
+      <max_wheel_acceleration>2.0</max_wheel_acceleration>
+      <publish_odom>true</publish_odom>
+      <publish_odom_tf>true</publish_odom_tf>
+      <publish_wheel_tf>true</publish_wheel_tf>
+      <odometry_topic>odom</odometry_topic>
+      <command_topic>cmd_vel</command_topic>
+      <robot_base_frame>base_footprint</robot_base_frame>
+      <odometry_frame>odom</odometry_frame>
+      <update_rate>50</update_rate>
+    </plugin>
+  </gazebo>
+
+</robot>
