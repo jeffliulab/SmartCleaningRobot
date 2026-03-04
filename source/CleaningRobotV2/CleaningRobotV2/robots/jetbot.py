@@ -65,7 +65,7 @@ JETBOT_LIDAR_CFG = RayCasterCfg(
         horizontal_res=1.0,
     ),
     max_distance=3.5,
-    mesh_prim_paths=["/World/ground", "/World/envs/env_.*/Scene"],
+    mesh_prim_paths=["/World/Scene"],
 )
 
 JETBOT_CAMERA_CFG = CameraCfg(

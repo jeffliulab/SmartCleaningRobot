@@ -1,0 +1,1631 @@
+<?xml version="1.0"?>
+<!--
+  Maze environment for Gazebo.
+  Generated from the same DFS algorithm as training (builders/maze.py).
+  8x8 maze, cell_size=0.45m, wall_h=0.3m, seed=42.
+  Features: 2 chambers, 5 loops, deep dead-ends, exit at south center.
+  No ceiling. Scene bounds: (-4, -4) to (4, 4).
+-->
+<sdf version="1.6">
+  <world name="maze">
+
+    <include><uri>model://ground_plane</uri></include>
+    <include><uri>model://sun</uri></include>
+
+    <physics type="ode">
+      <real_time_factor>1</real_time_factor>
+      <max_step_size>0.001</max_step_size>
+    </physics>
+
+    <model name="mw0">
+      <static>true</static>
+      <pose>-4.0500 4.0500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw1">
+      <static>true</static>
+      <pose>-3.6000 4.0500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw2">
+      <static>true</static>
+      <pose>-3.1500 4.0500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw3">
+      <static>true</static>
+      <pose>-2.7000 4.0500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw4">
+      <static>true</static>
+      <pose>-2.2500 4.0500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw5">
+      <static>true</static>
+      <pose>-1.8000 4.0500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw6">
+      <static>true</static>
+      <pose>-1.3500 4.0500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw7">
+      <static>true</static>
+      <pose>-0.9000 4.0500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw8">
+      <static>true</static>
+      <pose>-0.4500 4.0500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw9">
+      <static>true</static>
+      <pose>0.0000 4.0500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw10">
+      <static>true</static>
+      <pose>0.4500 4.0500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw11">
+      <static>true</static>
+      <pose>0.9000 4.0500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw12">
+      <static>true</static>
+      <pose>1.3500 4.0500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw13">
+      <static>true</static>
+      <pose>1.8000 4.0500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw14">
+      <static>true</static>
+      <pose>2.2500 4.0500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw15">
+      <static>true</static>
+      <pose>2.7000 4.0500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw16">
+      <static>true</static>
+      <pose>3.1500 4.0500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw17">
+      <static>true</static>
+      <pose>-4.0500 3.6000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw18">
+      <static>true</static>
+      <pose>-2.2500 3.6000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw19">
+      <static>true</static>
+      <pose>3.1500 3.6000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw20">
+      <static>true</static>
+      <pose>-4.0500 3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw21">
+      <static>true</static>
+      <pose>-3.1500 3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw22">
+      <static>true</static>
+      <pose>-2.2500 3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw23">
+      <static>true</static>
+      <pose>-1.3500 3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw24">
+      <static>true</static>
+      <pose>-0.4500 3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw25">
+      <static>true</static>
+      <pose>0.0000 3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw26">
+      <static>true</static>
+      <pose>0.4500 3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw27">
+      <static>true</static>
+      <pose>1.3500 3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw28">
+      <static>true</static>
+      <pose>1.8000 3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw29">
+      <static>true</static>
+      <pose>2.2500 3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw30">
+      <static>true</static>
+      <pose>2.7000 3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw31">
+      <static>true</static>
+      <pose>3.1500 3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw32">
+      <static>true</static>
+      <pose>-4.0500 2.7000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw33">
+      <static>true</static>
+      <pose>-3.1500 2.7000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw34">
+      <static>true</static>
+      <pose>-1.3500 2.7000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw35">
+      <static>true</static>
+      <pose>0.4500 2.7000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw36">
+      <static>true</static>
+      <pose>1.3500 2.7000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw37">
+      <static>true</static>
+      <pose>3.1500 2.7000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw38">
+      <static>true</static>
+      <pose>-4.0500 2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw39">
+      <static>true</static>
+      <pose>-3.1500 2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw40">
+      <static>true</static>
+      <pose>-2.7000 2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw41">
+      <static>true</static>
+      <pose>-2.2500 2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw42">
+      <static>true</static>
+      <pose>-1.8000 2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw43">
+      <static>true</static>
+      <pose>-1.3500 2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw44">
+      <static>true</static>
+      <pose>-0.9000 2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw45">
+      <static>true</static>
+      <pose>-0.4500 2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw46">
+      <static>true</static>
+      <pose>0.4500 2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw47">
+      <static>true</static>
+      <pose>0.9000 2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw48">
+      <static>true</static>
+      <pose>1.3500 2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw49">
+      <static>true</static>
+      <pose>2.2500 2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw50">
+      <static>true</static>
+      <pose>3.1500 2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw51">
+      <static>true</static>
+      <pose>-4.0500 1.8000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw52">
+      <static>true</static>
+      <pose>-0.4500 1.8000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw53">
+      <static>true</static>
+      <pose>2.2500 1.8000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw54">
+      <static>true</static>
+      <pose>3.1500 1.8000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw55">
+      <static>true</static>
+      <pose>-4.0500 1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw56">
+      <static>true</static>
+      <pose>-3.6000 1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw57">
+      <static>true</static>
+      <pose>-3.1500 1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw58">
+      <static>true</static>
+      <pose>-2.7000 1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw59">
+      <static>true</static>
+      <pose>-2.2500 1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw60">
+      <static>true</static>
+      <pose>-1.3500 1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw61">
+      <static>true</static>
+      <pose>-0.9000 1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw62">
+      <static>true</static>
+      <pose>-0.4500 1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw63">
+      <static>true</static>
+      <pose>0.0000 1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw64">
+      <static>true</static>
+      <pose>0.4500 1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw65">
+      <static>true</static>
+      <pose>0.9000 1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw66">
+      <static>true</static>
+      <pose>1.3500 1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw67">
+      <static>true</static>
+      <pose>1.8000 1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw68">
+      <static>true</static>
+      <pose>2.2500 1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw69">
+      <static>true</static>
+      <pose>3.1500 1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw70">
+      <static>true</static>
+      <pose>-4.0500 0.9000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw71">
+      <static>true</static>
+      <pose>-2.2500 0.9000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw72">
+      <static>true</static>
+      <pose>-1.3500 0.9000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw73">
+      <static>true</static>
+      <pose>2.2500 0.9000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw74">
+      <static>true</static>
+      <pose>3.1500 0.9000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw75">
+      <static>true</static>
+      <pose>-4.0500 0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw76">
+      <static>true</static>
+      <pose>-3.1500 0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw77">
+      <static>true</static>
+      <pose>-2.2500 0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw78">
+      <static>true</static>
+      <pose>-1.8000 0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw79">
+      <static>true</static>
+      <pose>-1.3500 0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw80">
+      <static>true</static>
+      <pose>-0.4500 0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw81">
+      <static>true</static>
+      <pose>0.0000 0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw82">
+      <static>true</static>
+      <pose>0.4500 0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw83">
+      <static>true</static>
+      <pose>0.9000 0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw84">
+      <static>true</static>
+      <pose>1.3500 0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw85">
+      <static>true</static>
+      <pose>2.2500 0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw86">
+      <static>true</static>
+      <pose>3.1500 0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw87">
+      <static>true</static>
+      <pose>-4.0500 0.0000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw88">
+      <static>true</static>
+      <pose>-3.1500 0.0000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw89">
+      <static>true</static>
+      <pose>-1.3500 0.0000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw90">
+      <static>true</static>
+      <pose>-0.4500 0.0000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw91">
+      <static>true</static>
+      <pose>2.2500 0.0000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw92">
+      <static>true</static>
+      <pose>3.1500 0.0000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw93">
+      <static>true</static>
+      <pose>-4.0500 -0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw94">
+      <static>true</static>
+      <pose>-3.1500 -0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw95">
+      <static>true</static>
+      <pose>-2.7000 -0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw96">
+      <static>true</static>
+      <pose>-2.2500 -0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw97">
+      <static>true</static>
+      <pose>-1.3500 -0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw98">
+      <static>true</static>
+      <pose>-0.4500 -0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw99">
+      <static>true</static>
+      <pose>0.0000 -0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw100">
+      <static>true</static>
+      <pose>0.4500 -0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw101">
+      <static>true</static>
+      <pose>0.9000 -0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw102">
+      <static>true</static>
+      <pose>1.3500 -0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw103">
+      <static>true</static>
+      <pose>1.8000 -0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw104">
+      <static>true</static>
+      <pose>2.2500 -0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw105">
+      <static>true</static>
+      <pose>3.1500 -0.4500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw106">
+      <static>true</static>
+      <pose>-4.0500 -0.9000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw107">
+      <static>true</static>
+      <pose>-2.2500 -0.9000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw108">
+      <static>true</static>
+      <pose>-0.4500 -0.9000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw109">
+      <static>true</static>
+      <pose>2.2500 -0.9000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw110">
+      <static>true</static>
+      <pose>3.1500 -0.9000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw111">
+      <static>true</static>
+      <pose>-4.0500 -1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw112">
+      <static>true</static>
+      <pose>-3.6000 -1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw113">
+      <static>true</static>
+      <pose>-3.1500 -1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw114">
+      <static>true</static>
+      <pose>-2.2500 -1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw115">
+      <static>true</static>
+      <pose>-1.8000 -1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw116">
+      <static>true</static>
+      <pose>-1.3500 -1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw117">
+      <static>true</static>
+      <pose>-0.9000 -1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw118">
+      <static>true</static>
+      <pose>-0.4500 -1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw119">
+      <static>true</static>
+      <pose>0.4500 -1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw120">
+      <static>true</static>
+      <pose>0.9000 -1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw121">
+      <static>true</static>
+      <pose>1.3500 -1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw122">
+      <static>true</static>
+      <pose>2.2500 -1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw123">
+      <static>true</static>
+      <pose>3.1500 -1.3500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw124">
+      <static>true</static>
+      <pose>-4.0500 -1.8000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw125">
+      <static>true</static>
+      <pose>-3.1500 -1.8000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw126">
+      <static>true</static>
+      <pose>0.4500 -1.8000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw127">
+      <static>true</static>
+      <pose>2.2500 -1.8000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw128">
+      <static>true</static>
+      <pose>3.1500 -1.8000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw129">
+      <static>true</static>
+      <pose>-4.0500 -2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw130">
+      <static>true</static>
+      <pose>-3.1500 -2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw131">
+      <static>true</static>
+      <pose>-2.7000 -2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw132">
+      <static>true</static>
+      <pose>-2.2500 -2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw133">
+      <static>true</static>
+      <pose>-1.8000 -2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw134">
+      <static>true</static>
+      <pose>-1.3500 -2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw135">
+      <static>true</static>
+      <pose>-0.9000 -2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw136">
+      <static>true</static>
+      <pose>-0.4500 -2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw137">
+      <static>true</static>
+      <pose>0.0000 -2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw138">
+      <static>true</static>
+      <pose>0.4500 -2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw139">
+      <static>true</static>
+      <pose>1.3500 -2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw140">
+      <static>true</static>
+      <pose>1.8000 -2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw141">
+      <static>true</static>
+      <pose>2.2500 -2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw142">
+      <static>true</static>
+      <pose>3.1500 -2.2500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw143">
+      <static>true</static>
+      <pose>-4.0500 -2.7000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw144">
+      <static>true</static>
+      <pose>3.1500 -2.7000 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw145">
+      <static>true</static>
+      <pose>-4.0500 -3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw146">
+      <static>true</static>
+      <pose>-3.6000 -3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw147">
+      <static>true</static>
+      <pose>-3.1500 -3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw148">
+      <static>true</static>
+      <pose>-2.7000 -3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw149">
+      <static>true</static>
+      <pose>-2.2500 -3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw150">
+      <static>true</static>
+      <pose>-1.8000 -3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw151">
+      <static>true</static>
+      <pose>-1.3500 -3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw152">
+      <static>true</static>
+      <pose>-0.9000 -3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw153">
+      <static>true</static>
+      <pose>-0.4500 -3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw154">
+      <static>true</static>
+      <pose>0.4500 -3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw155">
+      <static>true</static>
+      <pose>0.9000 -3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw156">
+      <static>true</static>
+      <pose>1.3500 -3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw157">
+      <static>true</static>
+      <pose>1.8000 -3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw158">
+      <static>true</static>
+      <pose>2.2500 -3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw159">
+      <static>true</static>
+      <pose>2.7000 -3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+    <model name="mw160">
+      <static>true</static>
+      <pose>3.1500 -3.1500 0.1500 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.45 0.45 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.45 0.45 0.3</size></box></geometry>
+          <material><ambient>0.55 0.55 0.7 1</ambient></material></visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>

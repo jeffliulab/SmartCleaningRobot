@@ -36,6 +36,7 @@ class SceneConfig:
     env_spacing: float
     recommended_max_envs: int
     description: str
+    fixed_spawn_pos: tuple[float, float] | None = None
 
 
 OFFICE_SCENE = SceneConfig(
@@ -74,7 +75,35 @@ WAREHOUSE_SCENE = SceneConfig(
     description="Simple warehouse with shelves and open floor (verified)",
 )
 
+SIMPLE_SCENE = SceneConfig(
+    name="simple",
+    usd_path="",
+    robot_init_pos=(0.0, 0.0, 0.05),
+    robot_init_rot=(1.0, 0.0, 0.0, 0.0),
+    scene_bounds=(-4.0, -4.0, 4.0, 4.0),
+    env_spacing=15.0,
+    recommended_max_envs=256,
+    description="Simple walled room with two obstacles (procedural, no USD download)",
+)
+
+MAZE_SCENE = SceneConfig(
+    name="maze",
+    usd_path="",
+    robot_init_pos=(0.0, 0.0, 0.05),
+    robot_init_rot=(1.0, 0.0, 0.0, 0.0),
+    scene_bounds=(-4.0, -4.0, 4.0, 4.0),
+    env_spacing=15.0,
+    recommended_max_envs=128,
+    description=(
+        "8x8 DFS simply-connected maze with dead-ends, "
+        "single exit at south wall (procedural, no ceiling)"
+    ),
+    fixed_spawn_pos=(0.0, 0.0),
+)
+
 AVAILABLE_SCENES: dict[str, SceneConfig] = {
+    "simple": SIMPLE_SCENE,
+    "maze": MAZE_SCENE,
     "office": OFFICE_SCENE,
     "hospital": HOSPITAL_SCENE,
     "warehouse": WAREHOUSE_SCENE,

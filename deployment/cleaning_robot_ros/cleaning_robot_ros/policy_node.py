@@ -1,8 +1,9 @@
 """ROS 2 node that runs a cleaning policy on live sensor data.
 
-Supports two policy modes:
-  - "simple" : reactive bump-and-turn (no model file required)
-  - "model"  : trained RL policy loaded from TorchScript .pt file
+Supports three policy modes:
+  - "simple"        : reactive bump-and-turn (no model file required)
+  - "wall_follower" : left-hand rule wall following (maze solving)
+  - "model"         : trained RL policy loaded from TorchScript .pt file
 
 Subscribes: /scan (LaserScan), /odom (Odometry)
 Publishes:  /cmd_vel (Twist), /coverage_map (OccupancyGrid, optional)
@@ -21,6 +22,7 @@ from std_msgs.msg import Header
 from .obs_builder import ObsBuilder
 from .coverage_tracker_cpu import CoverageTrackerCPU
 from .simple_policy import SimplePolicy
+from .wall_follower_policy import WallFollowerPolicy
 
 
 class PolicyNode(Node):
@@ -48,7 +50,7 @@ class PolicyNode(Node):
 
         # ---------- policy backend ----------
         self._model = None
-        self._simple = None
+        self._reactive_policy = None
 
         if self._policy_type == "model":
             import torch
@@ -56,9 +58,12 @@ class PolicyNode(Node):
             self.get_logger().info(f"Loading RL model from: {model_path}")
             self._model = torch.jit.load(model_path, map_location="cpu")
             self._model.eval()
+        elif self._policy_type == "wall_follower":
+            self.get_logger().info("Using left-hand rule wall follower policy")
+            self._reactive_policy = WallFollowerPolicy()
         else:
             self.get_logger().info("Using simple bump-and-turn policy")
-            self._simple = SimplePolicy(
+            self._reactive_policy = SimplePolicy(
                 forward_speed=self._max_v * 0.5,
                 turn_speed=self._max_w * 0.6,
             )
@@ -80,7 +85,9 @@ class PolicyNode(Node):
         )
 
         # ---------- ROS I/O ----------
-        self._sub_scan = self.create_subscription(LaserScan, "/scan", self._on_scan, 10)
+        self.declare_parameter("lidar_topic", "/laser_scan/out")
+        lidar_topic = self.get_parameter("lidar_topic").value
+        self._sub_scan = self.create_subscription(LaserScan, lidar_topic, self._on_scan, 10)
         self._sub_odom = self.create_subscription(Odometry, "/odom", self._on_odom, 10)
         self._pub_cmd = self.create_publisher(Twist, "/cmd_vel", 10)
         self._pub_map = self.create_publisher(OccupancyGrid, "/coverage_map", 1)
@@ -133,8 +140,8 @@ class PolicyNode(Node):
                 action = self._model(obs_tensor)
             cmd.linear.x = float(action[0, 0]) * self._max_v
             cmd.angular.z = float(action[0, 1]) * self._max_w
-        elif self._simple is not None and self._lidar_normalized is not None:
-            v, w = self._simple.compute_action(self._lidar_normalized)
+        elif self._reactive_policy is not None and self._lidar_normalized is not None:
+            v, w = self._reactive_policy.compute_action(self._lidar_normalized)
             cmd.linear.x = v
             cmd.angular.z = w
 

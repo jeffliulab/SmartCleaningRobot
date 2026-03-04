@@ -19,11 +19,10 @@ from isaaclab.assets import Articulation
 from isaaclab.envs import DirectRLEnv
 from isaaclab.sensors import Camera, RayCaster
 from isaaclab.sim.spawners.from_files import GroundPlaneCfg, spawn_ground_plane
-from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR
 from isaaclab.utils.math import sample_uniform
 
 from CleaningRobotV2.robots.jetbot import diff_drive_forward
-from CleaningRobotV2.scenes import AVAILABLE_SCENES
+from CleaningRobotV2.scenes import AVAILABLE_SCENES, build_scene
 from CleaningRobotV2.utils.coverage_tracker import CoverageTracker
 
 from .cleaningrobotv2_env_cfg import Cleaningrobotv2EnvCfg
@@ -33,13 +32,13 @@ class Cleaningrobotv2Env(DirectRLEnv):
     cfg: Cleaningrobotv2EnvCfg
 
     def __init__(self, cfg: Cleaningrobotv2EnvCfg, render_mode: str | None = None, **kwargs):
+        # scene_config must be set before super().__init__ because _setup_scene uses it
+        self.scene_config = AVAILABLE_SCENES[cfg.scene_name]
         super().__init__(cfg, render_mode, **kwargs)
 
         self._wheel_joint_ids, _ = self.robot.find_joints(
             ["left_wheel_joint", "right_wheel_joint"]
         )
-
-        self.scene_config = AVAILABLE_SCENES[self.cfg.scene_name]
 
         self.coverage_tracker = CoverageTracker(
             grid_resolution=self.cfg.coverage_grid_resolution,
@@ -60,23 +59,24 @@ class Cleaningrobotv2Env(DirectRLEnv):
     def _setup_scene(self):
         self.robot = Articulation(self.cfg.robot_cfg)
 
-        # Spawn scene USD
-        scene_usd = f"{ISAAC_NUCLEUS_DIR}{self.scene_config.usd_path}"
-        scene_spawn_cfg = sim_utils.UsdFileCfg(usd_path=scene_usd)
-        scene_spawn_cfg.func("/World/envs/env_.*/Scene", scene_spawn_cfg)
+        build_scene(self.scene_config)
 
         spawn_ground_plane(prim_path="/World/ground", cfg=GroundPlaneCfg())
 
         self.lidar = RayCaster(self.cfg.lidar_cfg)
-        self.camera = Camera(self.cfg.camera_cfg)
+
+        self.camera = None
+        if self.cfg.enable_camera and self.cfg.camera_cfg is not None:
+            self.camera = Camera(self.cfg.camera_cfg)
 
         self.scene.clone_environments(copy_from_source=False)
         if self.device == "cpu":
-            self.scene.filter_collisions(global_prim_paths=[])
+            self.scene.filter_collisions(global_prim_paths=["/World/Scene"])
 
         self.scene.articulations["robot"] = self.robot
         self.scene.sensors["lidar"] = self.lidar
-        self.scene.sensors["camera"] = self.camera
+        if self.camera is not None:
+            self.scene.sensors["camera"] = self.camera
 
         light_cfg = sim_utils.DomeLightCfg(intensity=2000.0, color=(0.75, 0.75, 0.75))
         light_cfg.func("/World/Light", light_cfg)
@@ -168,16 +168,20 @@ class Cleaningrobotv2Env(DirectRLEnv):
             env_ids = self.robot._ALL_INDICES
         super()._reset_idx(env_ids)
 
-        # Random start position within a safe fraction of scene bounds
-        x_min, y_min, x_max, y_max = self.scene_config.scene_bounds
-        safe = 0.4
         default_root_state = self.robot.data.default_root_state[env_ids].clone()
-        default_root_state[:, 0] = sample_uniform(
-            x_min * safe, x_max * safe, (len(env_ids),), self.device
-        )
-        default_root_state[:, 1] = sample_uniform(
-            y_min * safe, y_max * safe, (len(env_ids),), self.device
-        )
+
+        if self.scene_config.fixed_spawn_pos is not None:
+            default_root_state[:, 0] = self.scene_config.fixed_spawn_pos[0]
+            default_root_state[:, 1] = self.scene_config.fixed_spawn_pos[1]
+        else:
+            x_min, y_min, x_max, y_max = self.scene_config.scene_bounds
+            safe = 0.4
+            default_root_state[:, 0] = sample_uniform(
+                x_min * safe, x_max * safe, (len(env_ids),), self.device
+            )
+            default_root_state[:, 1] = sample_uniform(
+                y_min * safe, y_max * safe, (len(env_ids),), self.device
+            )
         default_root_state[:, 2] = 0.05
 
         # Random yaw orientation

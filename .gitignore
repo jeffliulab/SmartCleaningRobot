@@ -85,3 +85,13 @@ coverage_maps/
 # SELF-FILES
 自用说明书_train.md
 自用说明书_deployment.md
+自用说明书.md
+自用说明书.*
+
+# build artifacts / deployment outputs
+deployment/log/
+deployment/install/
+deployment/build/
+**/log/
+**/install/
+**/build/

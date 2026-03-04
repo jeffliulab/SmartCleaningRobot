@@ -36,7 +36,8 @@ class Cleaningrobotv2EnvCfg(DirectRLEnvCfg):
 
     # -- sensors --
     lidar_cfg: RayCasterCfg = JETBOT_LIDAR_CFG
-    camera_cfg: CameraCfg = JETBOT_CAMERA_CFG
+    camera_cfg: CameraCfg | None = JETBOT_CAMERA_CFG
+    enable_camera: bool = False
 
     # -- scene --
     scene: InteractiveSceneCfg = InteractiveSceneCfg(

@@ -1,3 +1,12 @@
-"""Scene configurations for the cleaning robot project."""
+"""Scene configurations and builders for the cleaning robot project."""
 
-from .scene_cfg import AVAILABLE_SCENES, HOSPITAL_SCENE, OFFICE_SCENE, WAREHOUSE_SCENE
+from .scene_cfg import (
+    AVAILABLE_SCENES,
+    HOSPITAL_SCENE,
+    MAZE_SCENE,
+    OFFICE_SCENE,
+    SIMPLE_SCENE,
+    WAREHOUSE_SCENE,
+    SceneConfig,
+)
+from .builders import SCENE_BUILDERS, build_scene
