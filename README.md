@@ -19,43 +19,43 @@ Noetic Version Demos: (including exploration, mapping, cleaning, ..)
 - Real Demo Link: https://youtu.be/zmo8CKolIh4?si=pPlF57XZn4DD5oo9
 - Sim Demo Link: https://youtu.be/rqXiXsVubhQ?si=3jIF6Q37Kqr45SRk
 
-<img src="./docs/noetic/modules.png" width="600">
+<img src="./docs/readme/noetic/modules.png" width="600">
 
 Mapping:
 
-<img src="./docs/noetic/slam_3_explore2.png" width="600">
+<img src="./docs/readme/noetic/slam_3_explore2.png" width="600">
 
 Control Panel:
 
-<img src="./docs/noetic/control_panel_gui.png" width="400">
+<img src="./docs/readme/noetic/control_panel_gui.png" width="400">
 
 Planning:
 
-<img src="./docs/noetic/route_analysis_2.png" width="400">
+<img src="./docs/readme/noetic/route_analysis_2.png" width="400">
 
-<img src="./docs/noetic/route_analysis_4.png" width="400">
+<img src="./docs/readme/noetic/route_analysis_4.png" width="400">
 
 Hardware Platform:
 
-<img src="./docs/noetic/turtlebot3_built.png" width="400">
+<img src="./docs/readme/noetic/turtlebot3_built.png" width="400">
 
 ### Smart Glove Branch
 
 This is a branch ([repo: SmartGlove](https://github.com/jeffliulab/SmartGlove?tab=readme-ov-file)) focus on smart glove, which can control robot arm and experimentally connect into a self-designed IoT platform.
 
-<img src="./docs/robot_arm/1751419760912.png" width="400">
+<img src="./docs/readme/robot_arm/1751419760912.png" width="400">
 
 Hardware implementations:
 
-<img src="./docs/robot_arm/framework.png" width="400">
+<img src="./docs/readme/robot_arm/framework.png" width="400">
 
 ROS topics:
 
-<img src="./docs/robot_arm/ros.png" width="400">
+<img src="./docs/readme/robot_arm/ros.png" width="400">
 
 Robot arm:
 
-<img src="./docs/robot_arm/1751419900912.png" width="400">
+<img src="./docs/readme/robot_arm/1751419900912.png" width="400">
 
 ## Furthermore
 

@@ -1,0 +1,98 @@
+# SAC configuration for Maze Escape task.
+#
+# Key design decisions:
+#   - SAC requires 5 models: policy, critic_1, critic_2, target_critic_1, target_critic_2
+#   - separate: True (mandatory for SAC — Runner only supports 2 roles in shared mode)
+#   - Larger network [256, 128, 64] vs PPO's [128, 64] for better representation
+#   - Critics take concatenated [OBSERVATIONS, ACTIONS] as input
+#   - Automatic entropy tuning (learn_entropy: True) for robust exploration
+#   - Replay buffer (memory_size) instead of rollout buffer
+#   - 3M timesteps for thorough convergence
+
+seed: 42
+
+models:
+  separate: True
+  policy:
+    class: GaussianMixin
+    clip_actions: False
+    clip_log_std: True
+    min_log_std: -20.0
+    max_log_std: 2.0
+    initial_log_std: 0.0
+    network:
+      - name: net
+        input: OBSERVATIONS
+        layers: [256, 128, 64]
+        activations: elu
+    output: ACTIONS
+  critic_1:
+    class: DeterministicMixin
+    clip_actions: False
+    network:
+      - name: net
+        input: concatenate([OBSERVATIONS, ACTIONS])
+        layers: [256, 128, 64]
+        activations: elu
+    output: ONE
+  critic_2:
+    class: DeterministicMixin
+    clip_actions: False
+    network:
+      - name: net
+        input: concatenate([OBSERVATIONS, ACTIONS])
+        layers: [256, 128, 64]
+        activations: elu
+    output: ONE
+  target_critic_1:
+    class: DeterministicMixin
+    clip_actions: False
+    network:
+      - name: net
+        input: concatenate([OBSERVATIONS, ACTIONS])
+        layers: [256, 128, 64]
+        activations: elu
+    output: ONE
+  target_critic_2:
+    class: DeterministicMixin
+    clip_actions: False
+    network:
+      - name: net
+        input: concatenate([OBSERVATIONS, ACTIONS])
+        layers: [256, 128, 64]
+        activations: elu
+    output: ONE
+
+memory:
+  class: RandomMemory
+  memory_size: 50000
+
+agent:
+  class: SAC
+  gradient_steps: 1
+  batch_size: 4096
+  discount_factor: 0.99
+  polyak: 0.005
+  actor_learning_rate: 3.0e-04
+  critic_learning_rate: 3.0e-04
+  learning_rate: 3.0e-04
+  random_timesteps: 1000
+  learning_starts: 1000
+  learn_entropy: True
+  entropy_learning_rate: 3.0e-04
+  initial_entropy_value: 1.0
+  target_entropy: null
+  grad_norm_clip: 1.0
+  state_preprocessor: RunningStandardScaler
+  state_preprocessor_kwargs: null
+  rewards_shaper_scale: 1.0
+  experiment:
+    directory: "maze_escape"
+    experiment_name: ""
+    write_interval: auto
+    checkpoint_interval: auto
+
+trainer:
+  class: SequentialTrainer
+  timesteps: 3000000
+  environment_info: log

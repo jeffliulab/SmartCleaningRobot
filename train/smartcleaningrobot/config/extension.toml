@@ -1,0 +1,27 @@
+[package]
+
+# Semantic Versioning is used: https://semver.org/
+version = "0.2.0"
+
+# Description
+category = "isaaclab"
+readme  = "README.md"
+
+title = "SmartCleaningRobot — RL Extension for Isaac Lab"
+author = "Jeff Liu"
+maintainer = "Jeff Liu"
+description = "Multi-robot, multi-task RL environments for Isaac Lab"
+repository = "https://github.com/jeffliulab/SmartCleaningRobot.git"
+keywords = ["rl", "robotics", "maze", "coverage", "isaaclab"]
+
+[dependencies]
+"isaaclab" = {}
+"isaaclab_assets" = {}
+"isaaclab_mimic" = {}
+"isaaclab_rl" = {}
+"isaaclab_tasks" = {}
+
+[[python.module]]
+name = "smartcleaningrobot"
+
+[isaac_lab_settings]

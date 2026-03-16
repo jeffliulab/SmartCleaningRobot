@@ -1,0 +1,124 @@
+"""Simple scene + Jetbot: coverage cleaning demo in Isaac Sim.
+
+Scene:  Simple room / Hospital / Office / Warehouse (selectable)
+Robot:  Jetbot (differential drive)
+Task:   Maximize floor coverage
+
+Usage:
+    python train/scripts/Simple_Jetbot/Simple_Jetbot_Coverage.py --scene simple --policy explorer --num_envs 1
+    python train/scripts/Simple_Jetbot/Simple_Jetbot_Coverage.py --scene hospital --policy random --num_envs 1 --headless --max_steps 200
+"""
+
+from __future__ import annotations
+
+import argparse
+import importlib
+
+from isaaclab.app import AppLauncher
+
+ENV_ID = "SmartCleaningRobot-Coverage-v0"
+
+parser = argparse.ArgumentParser(description="Simple/USD scene Jetbot coverage demo")
+parser.add_argument("--scene", type=str, default="simple",
+                    choices=["simple", "maze", "office", "hospital", "warehouse"])
+parser.add_argument(
+    "--policy",
+    type=str,
+    default="zero",
+    choices=["zero", "random", "explorer"],
+    help="zero: no motion, random: random actions, explorer: bump-and-turn policy",
+)
+parser.add_argument("--num_envs", type=int, default=1)
+parser.add_argument("--max_steps", type=int, default=0, help="Stop after N steps (0=unlimited)")
+AppLauncher.add_app_launcher_args(parser)
+args_cli = parser.parse_args()
+
+app_launcher = AppLauncher(args_cli)
+simulation_app = app_launcher.app
+
+import gymnasium as gym
+import torch
+
+import smartcleaningrobot  # noqa: F401
+
+from smartcleaningrobot.traditional import RandomExplorerPolicy
+from smartcleaningrobot.utils.map_viewer import render_coverage_map
+
+
+def _resolve_entry_point(entry_point: str):
+    """Resolve 'module.path:ClassName' string to the actual class."""
+    module_path, class_name = entry_point.rsplit(":", 1)
+    module = importlib.import_module(module_path)
+    return getattr(module, class_name)
+
+
+def main():
+    cfg_cls = _resolve_entry_point(
+        gym.spec(ENV_ID).kwargs["env_cfg_entry_point"]
+    )
+    env_cfg = cfg_cls()
+    env_cfg.scene.num_envs = args_cli.num_envs
+    env_cfg.scene_name = args_cli.scene
+
+    print(f"[run] Task: Coverage | Scene: {args_cli.scene}")
+    print("[run] Creating environment ...")
+    env = gym.make(ENV_ID, cfg=env_cfg)
+    print("[run] Environment created. Resetting ...")
+    obs, info = env.reset()
+    print(f"[run] Reset done. Obs shape: {obs['policy'].shape}")
+
+    explorer = None
+    if args_cli.policy == "explorer":
+        explorer = RandomExplorerPolicy(
+            num_envs=args_cli.num_envs, device=env.unwrapped.device
+        )
+
+    step = 0
+    episode = 0
+    max_test_steps = args_cli.max_steps
+
+    while simulation_app.is_running():
+        with torch.inference_mode():
+            if args_cli.policy == "explorer":
+                action = explorer.compute_action(obs["policy"])
+            elif args_cli.policy == "random":
+                action = torch.randn(args_cli.num_envs, 2, device=env.unwrapped.device) * 0.5
+            else:
+                action = torch.zeros(args_cli.num_envs, 2, device=env.unwrapped.device)
+
+        obs, reward, terminated, truncated, info = env.step(action)
+        step += 1
+
+        if step % 100 == 0:
+            pos = env.unwrapped.robot.data.root_pos_w[0].cpu()
+            coverage = env.unwrapped.coverage_tracker.get_coverage_ratio()
+            print(
+                f"  [step {step}] reward={reward[0].item():.4f}"
+                f" coverage={coverage[0]:.2%}"
+                f" pos=({pos[0]:.3f}, {pos[1]:.3f}, {pos[2]:.3f})"
+            )
+
+        if terminated.any() or truncated.any():
+            coverage = env.unwrapped.coverage_tracker.get_coverage_ratio()
+            print(f"[Episode {episode}] Step {step} | Coverage: {coverage[0]:.1%}")
+            grid = env.unwrapped.coverage_tracker.get_full_map()[0].cpu().numpy()
+            render_coverage_map(
+                grid,
+                save_path=f"train/outputs/coverage_maps/episode_{episode}_{args_cli.scene}.png",
+            )
+            obs, info = env.reset()
+            if explorer is not None:
+                explorer.reset(list(range(args_cli.num_envs)))
+            step = 0
+            episode += 1
+
+        if max_test_steps > 0 and step >= max_test_steps:
+            coverage = env.unwrapped.coverage_tracker.get_coverage_ratio()
+            print(f"[Test complete] {max_test_steps} steps | Coverage: {coverage[0]:.1%}")
+            break
+
+    env.close()
+
+
+if __name__ == "__main__":
+    main()
