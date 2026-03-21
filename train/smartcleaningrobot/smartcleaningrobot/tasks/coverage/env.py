@@ -31,7 +31,7 @@ from .env_cfg import CoverageEnvCfg
 class CoverageEnv(DirectRLEnv):
     cfg: CoverageEnvCfg
 
-    def __init__(self, cfg: Cleaningrobotv2EnvCfg, render_mode: str | None = None, **kwargs):
+    def __init__(self, cfg: CoverageEnvCfg, render_mode: str | None = None, **kwargs):
         # scene_config must be set before super().__init__ because _setup_scene uses it
         self.scene_config = AVAILABLE_SCENES[cfg.scene_name]
         super().__init__(cfg, render_mode, **kwargs)
@@ -111,8 +111,8 @@ class CoverageEnv(DirectRLEnv):
         sensor_pos = self.lidar.data.pos_w.unsqueeze(1)
         ray_hits = self.lidar.data.ray_hits_w
         lidar_distances = torch.norm(ray_hits - sensor_pos, dim=-1)
-        # Downsample 360 -> 36 rays, normalize to [0, 1]
-        lidar_obs = lidar_distances[:, ::10]
+        # Downsample 360 -> 72 rays (5° resolution), normalize to [0, 1]
+        lidar_obs = lidar_distances[:, ::5]
         lidar_obs = lidar_obs.clamp(0.0, self.cfg.lidar_cfg.max_distance) / self.cfg.lidar_cfg.max_distance
 
         # Coverage tracking
@@ -148,6 +148,9 @@ class CoverageEnv(DirectRLEnv):
 
         time_penalty = self.cfg.rew_time_penalty * torch.ones(self.num_envs, device=self.device)
 
+        forward_vel = self.robot.data.root_com_lin_vel_b[:, 0]
+        forward_bonus = self.cfg.rew_forward_bonus * forward_vel.clamp(min=0.0)
+
         # Milestone bonus: awarded once per milestone per episode
         coverage_ratio = self.coverage_tracker.get_coverage_ratio()
         current_milestones = coverage_ratio.unsqueeze(-1) >= self._milestone_thresholds.unsqueeze(0)
@@ -155,7 +158,7 @@ class CoverageEnv(DirectRLEnv):
         milestone_bonus = self.cfg.rew_milestone_bonus * new_milestones.any(dim=-1).float()
         self._milestones_reached = current_milestones
 
-        return coverage_reward + collision_penalty + time_penalty + milestone_bonus
+        return coverage_reward + collision_penalty + time_penalty + forward_bonus + milestone_bonus
 
     def _get_dones(self) -> tuple[torch.Tensor, torch.Tensor]:
         time_out = self.episode_length_buf >= self.max_episode_length - 1

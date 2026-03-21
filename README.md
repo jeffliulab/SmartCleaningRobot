@@ -8,7 +8,23 @@ I am currently rebuilding the project to explore deeper in AI applications on cl
 
 ### Main Branch (ROS Humble & Isaac Lab)
 
-To explore deeper in Reinforcement Learning, I create this whole new main branch in ROS Humble, with Isaac Lab, to explore reinforcement learning in cleaning robot tasks.
+Train intelligent cleaning robots using **reinforcement learning** in NVIDIA Isaac Lab simulation, then deploy to ROS 2 + Gazebo / real hardware. The project defines 7 progressive tasks (T1-T7) covering maze navigation, floor coverage, object detection, arm grasping, and end-to-end mobile manipulation.
+
+**Stack:** Isaac Sim 5.1.0 / Isaac Lab 0.54.2 / SKRL 1.4.3 / PyTorch 2.7.0
+
+| Task               | Description                                       | Robot                   | Status                       |
+| ------------------ | ------------------------------------------------- | ----------------------- | ---------------------------- |
+| T1 MazeEscape      | Navigate DFS maze to exit (SAC)                   | JetBot                  | Code ready, pending training |
+| T2 Coverage        | Maximise floor coverage (PPO)                     | JetBot                  | Code ready, pending training |
+| T3 ObjectDetection | CV pipeline: Oracle → YOLOv8 → SmolVLA          | —                      | Phase A done, B/C TODO       |
+| T4 ArmGrasp        | Fixed-base arm reach & grasp (3-stage curriculum) | TurtleBot4 + WidowX 250 | Code ready, pending training |
+| T5 ObjectPickup    | Mobile manipulation: navigate + grasp + place     | TurtleBot4 + WidowX 250 | Code ready, pending training |
+| T6 CoverageAvoid   | Coverage while avoiding floor objects             | JetBot                  | Code ready, pending training |
+| T7 CoveragePickup  | End-to-end: clean + classify + pick up (FSM)      | TurtleBot4 + WidowX 250 | Code ready, pending training |
+
+**Next:** Train T1/T2 → T4 → T5/T6 → T7, then write detailed experimental reports and deploy via ROS 2 + Gazebo.
+
+**Docs:** Complete offline-ready guides in [`docs/`](docs/README.md).
 
 ### ROS Noetic Branch (Origin System)
 
@@ -61,13 +77,12 @@ Robot arm:
 
 ### Future Plans
 
-Based on previous work, in this new project, I will add following feature:
-
-* Intelligent Agent built in edge device, use Jetson Nano to increase the power.
-* DIY exploration and mapping module
-* Update cleaning module
-* New control panel based on phone
-* Connect with other IoT devices
+* Deploy trained policies to real robot (Jetson Orin NX + TurtleBot4 + WidowX 250), validate sim-to-real transfer
+* End-to-end vision-language-action model (SmolVLA-450M) replacing the Oracle+YOLOv8 pipeline
+* Multi-room navigation with SLAM-based global planning
+* Multi-robot coordination for large-scale cleaning scenarios
+* Mobile app control panel with real-time coverage visualization
+* Integration with IoT ecosystem (smart home sensors, scheduling, notifications)
 
 ### Relevant Literature and References
 

@@ -4,14 +4,13 @@ The robot (JetBot) must navigate a procedural DFS maze and reach the
 exit in minimum time.  This task is entirely separate from the coverage
 /cleaning task and serves as an RL learning exercise.
 
-Observations (41 dims, **body frame**):
-    velocity(2) + LiDAR(36) + exit_dir_body(2) + exit_distance(1)
+Observations (77 dims, **body frame**):
+    velocity(2) + LiDAR(72) + exit_dir_body(2) + exit_distance(1)
 
 Rewards:
     - Dense:  BFS-distance reduction toward exit each step
     - Sparse: large bonus on reaching the exit
     - Penalties: collision, time
-    - Small exploration bonus for visiting new cells
     - Forward motion bonus to discourage spinning in place
 """
 
@@ -142,9 +141,9 @@ class MazeEscapeEnv(DirectRLEnv):
         sensor_pos = self.lidar.data.pos_w.unsqueeze(1)
         ray_hits = self.lidar.data.ray_hits_w
         lidar_distances = torch.norm(ray_hits - sensor_pos, dim=-1)
-        lidar_obs = lidar_distances[:, ::10]
+        lidar_obs = lidar_distances[:, ::5]
         lidar_obs = lidar_obs.clamp(0.0, self.cfg.lidar_cfg.max_distance) / self.cfg.lidar_cfg.max_distance
-        # (N, 36)
+        # (N, 72)
 
         # Exit direction and distance in BODY FRAME
         robot_xy = root_pos[:, :2] - self.scene.env_origins[:, :2]

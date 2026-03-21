@@ -1,7 +1,7 @@
 # PPO configuration for Maze Escape task.
 #
 # Key differences from the coverage/cleaning PPO config:
-#   - Smaller network (128, 64) since observation is only 44-dim
+#   - Smaller network (128, 64) since observation is only 77-dim
 #   - Higher discount factor (0.995) for delayed exit bonus
 #   - Higher entropy scale (0.02) to encourage exploration
 #   - Separate experiment directory (maze_escape)

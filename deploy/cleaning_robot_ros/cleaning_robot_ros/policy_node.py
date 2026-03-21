@@ -3,8 +3,8 @@
 Supports four policy modes:
   - "simple"        : reactive bump-and-turn (no model file required)
   - "wall_follower" : left-hand rule wall following (maze solving)
-  - "model"         : trained RL policy for cleaning task (1066-dim obs)
-  - "maze_model"    : trained RL policy for maze escape  (41-dim obs, body frame)
+  - "model"         : trained RL policy for cleaning task (1102-dim obs)
+  - "maze_model"    : trained RL policy for maze escape  (77-dim obs, body frame)
 
 Subscribes: /scan (LaserScan), /odom (Odometry)
 Publishes:  /cmd_vel (Twist), /coverage_map (OccupancyGrid, optional)
@@ -20,11 +20,11 @@ from nav_msgs.msg import Odometry, OccupancyGrid
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Header
 
-from .obs_builder import ObsBuilder
-from .maze_obs_builder import MazeObsBuilder
+from .obs_builders.coverage import ObsBuilder
+from .obs_builders.maze import MazeObsBuilder
 from .coverage_tracker_cpu import CoverageTrackerCPU
-from .simple_policy import SimplePolicy
-from .wall_follower_policy import WallFollowerPolicy
+from .baselines.simple_policy import SimplePolicy
+from .baselines.wall_follower import WallFollowerPolicy
 
 
 class PolicyNode(Node):
@@ -37,7 +37,7 @@ class PolicyNode(Node):
         self.declare_parameter("max_linear_vel", 0.3)
         self.declare_parameter("max_angular_vel", 2.0)
         self.declare_parameter("lidar_num_rays", 360)
-        self.declare_parameter("lidar_downsample_factor", 10)
+        self.declare_parameter("lidar_downsample_factor", 5)
         self.declare_parameter("lidar_max_distance", 3.5)
         self.declare_parameter("coverage_grid_resolution", 0.05)
         self.declare_parameter("coverage_local_view_size", 32)

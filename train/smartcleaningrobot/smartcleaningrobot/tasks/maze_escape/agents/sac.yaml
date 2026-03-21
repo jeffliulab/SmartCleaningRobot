@@ -65,7 +65,7 @@ models:
 
 memory:
   class: RandomMemory
-  memory_size: 50000
+  memory_size: 500000  # increased from 50000: 128 envs fill 50k in ~390 steps, causing rapid overwrite
 
 agent:
   class: SAC

@@ -19,9 +19,10 @@ import torch
 import isaaclab.sim as sim_utils
 from isaaclab.actuators import ImplicitActuatorCfg
 from isaaclab.assets import ArticulationCfg
-from isaaclab.sensors import CameraCfg, RayCasterCfg
-from isaaclab.sensors.ray_caster import patterns
+from isaaclab.sensors import CameraCfg
 from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR
+
+from ..sensors.lidar import LIDAR_2D_CFG
 
 WHEEL_RADIUS = 0.0325
 WHEEL_SEPARATION = 0.118
@@ -54,19 +55,8 @@ JETBOT_CFG = ArticulationCfg(
     },
 )
 
-JETBOT_LIDAR_CFG = RayCasterCfg(
-    prim_path="/World/envs/env_.*/Robot/chassis",
-    offset=RayCasterCfg.OffsetCfg(pos=(0.0, 0.0, 0.05)),
-    ray_alignment="yaw",
-    pattern_cfg=patterns.LidarPatternCfg(
-        channels=1,
-        vertical_fov_range=(0.0, 0.0),
-        horizontal_fov_range=(0.0, 360.0),
-        horizontal_res=1.0,
-    ),
-    max_distance=3.5,
-    mesh_prim_paths=["/World/Scene"],
-)
+# Backward-compatible alias — prefer importing LIDAR_2D_CFG from sensors.lidar
+JETBOT_LIDAR_CFG = LIDAR_2D_CFG
 
 JETBOT_CAMERA_CFG = CameraCfg(
     prim_path="/World/envs/env_.*/Robot/chassis/front_cam",

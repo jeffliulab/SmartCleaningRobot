@@ -23,9 +23,9 @@ class CoverageEnvCfg(DirectRLEnvCfg):
     episode_length_s = 300.0
 
     # -- spaces --
-    # pose(3) + vel(2) + lidar(36) + local_coverage(32*32=1024) + coverage_ratio(1)
+    # pose(3) + vel(2) + lidar(72) + local_coverage(32*32=1024) + coverage_ratio(1)
     action_space = 2
-    observation_space = 1066
+    observation_space = 1102
     state_space = 0
 
     # -- simulation --
@@ -59,7 +59,8 @@ class CoverageEnvCfg(DirectRLEnvCfg):
     rew_collision_penalty: float = -5.0
     rew_time_penalty: float = -0.01
     rew_milestone_bonus: float = 50.0
-    collision_threshold: float = 0.15
+    rew_forward_bonus: float = 0.3
+    collision_threshold: float = 0.20
 
     # -- done conditions --
     coverage_done_threshold: float = 0.98

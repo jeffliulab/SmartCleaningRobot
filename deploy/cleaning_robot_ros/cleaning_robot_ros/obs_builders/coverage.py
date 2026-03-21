@@ -1,11 +1,11 @@
-"""Build the 1066-dim observation vector from ROS messages.
+"""Build the 1102-dim observation vector from ROS messages.
 
 The observation format MUST match the training environment exactly:
   [0:3]      x, y, yaw
   [3:5]      v_forward, omega
-  [5:41]     lidar (36 downsampled rays, normalized)
-  [41:1065]  local coverage map (32x32 patch, flattened)
-  [1065]     global coverage ratio
+  [5:77]     lidar (72 downsampled rays, normalized)
+  [77:1101]  local coverage map (32x32 patch, flattened)
+  [1101]     global coverage ratio
 """
 
 from __future__ import annotations
@@ -20,12 +20,12 @@ import torch
 class ObsBuilder:
     """Converts ROS sensor data into the observation tensor expected by the policy."""
 
-    OBS_DIM = 1066
+    OBS_DIM = 1102
 
     def __init__(
         self,
         lidar_num_rays: int = 360,
-        lidar_downsample_factor: int = 10,
+        lidar_downsample_factor: int = 5,
         lidar_max_distance: float = 3.5,
         coverage_local_size: int = 32,
     ):
@@ -36,7 +36,7 @@ class ObsBuilder:
 
         self._pose: Optional[np.ndarray] = None      # (x, y, yaw)
         self._vel: Optional[np.ndarray] = None        # (v_fwd, omega)
-        self._lidar: Optional[np.ndarray] = None      # (36,)
+        self._lidar: Optional[np.ndarray] = None      # (72,)
         self._coverage_local: Optional[np.ndarray] = None  # (32*32,)
         self._coverage_ratio: float = 0.0
 
@@ -76,10 +76,10 @@ class ObsBuilder:
         obs = np.concatenate([
             self._pose,                                             # 3
             self._vel,                                              # 2
-            self._lidar,                                            # 36
+            self._lidar,                                            # 72
             self._coverage_local,                                   # 1024
             np.array([self._coverage_ratio], dtype=np.float32),     # 1
-        ])                                                          # total = 1066
+        ])                                                          # total = 1102
 
         assert obs.shape[0] == self.OBS_DIM, f"obs dim mismatch: {obs.shape[0]} != {self.OBS_DIM}"
-        return torch.from_numpy(obs).unsqueeze(0)  # (1, 1066)
+        return torch.from_numpy(obs).unsqueeze(0)  # (1, 1102)

@@ -5,6 +5,7 @@ from .scene_cfg import (
     HOSPITAL_SCENE,
     MAZE_SCENE,
     OFFICE_SCENE,
+    ROOM_WITH_OBJECTS_SCENE,
     SIMPLE_SCENE,
     WAREHOUSE_SCENE,
     SceneConfig,

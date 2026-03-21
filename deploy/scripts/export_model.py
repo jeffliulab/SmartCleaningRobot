@@ -3,12 +3,12 @@
 After training completes, run this script to convert the skrl checkpoint
 into a self-contained .pt file that policy_node.py can load directly.
 
-Usage (cleaning task — PPO, 1066-dim obs):
+Usage (cleaning task — PPO, 1102-dim obs):
     python deploy/scripts/export_model.py \
         --checkpoint logs/skrl/cleaning_coverage/.../checkpoints/best_agent.pt \
         --output deploy/models/best_agent_scripted.pt
 
-Usage (maze task — SAC, 41-dim obs):
+Usage (maze task — PPO, 77-dim obs):
     python deploy/scripts/export_model.py \
         --task maze \
         --checkpoint logs/skrl/maze_escape/.../checkpoints/best_agent.pt \
@@ -27,14 +27,34 @@ import torch.nn as nn
 
 TASK_CONFIGS = {
     "cleaning": {
-        "obs_dim": 1066,
+        "obs_dim": 1102,
         "act_dim": 2,
         "hidden": [256, 128, 64],
     },
     "maze": {
-        "obs_dim": 41,
+        "obs_dim": 77,
         "act_dim": 2,
         "hidden": [256, 128, 64],
+    },
+    "arm_grasp": {
+        "obs_dim": 21,
+        "act_dim": 6,
+        "hidden": [256, 128, 64],
+    },
+    "object_pickup": {
+        "obs_dim": 94,
+        "act_dim": 8,
+        "hidden": [512, 256, 128],
+    },
+    "coverage_avoid": {
+        "obs_dim": 81,
+        "act_dim": 2,
+        "hidden": [256, 128, 64],
+    },
+    "coverage_pickup": {
+        "obs_dim": 112,
+        "act_dim": 8,
+        "hidden": [512, 256, 128],
     },
 }
 
@@ -107,7 +127,7 @@ def main():
         "--task",
         default="cleaning",
         choices=list(TASK_CONFIGS.keys()),
-        help="Task type: 'cleaning' (1066-dim) or 'maze' (41-dim)",
+        help="Task type (cleaning/maze/arm_grasp/object_pickup/coverage_avoid/coverage_pickup)",
     )
     args = parser.parse_args()
     export(args.checkpoint, args.output, args.task)

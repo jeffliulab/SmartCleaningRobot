@@ -101,9 +101,24 @@ MAZE_SCENE = SceneConfig(
     fixed_spawn_pos=(0.0, 0.0),
 )
 
+ROOM_WITH_OBJECTS_SCENE = SceneConfig(
+    name="room_with_objects",
+    usd_path="",
+    robot_init_pos=(0.0, 0.0, 0.05),
+    robot_init_rot=(1.0, 0.0, 0.0, 0.0),
+    scene_bounds=(-4.0, -4.0, 4.0, 4.0),
+    env_spacing=15.0,
+    recommended_max_envs=128,
+    description=(
+        "8 m × 8 m walled room, no internal obstacles. "
+        "Small objects (hairpin/cable/coin/eraser) are spawned by the task env."
+    ),
+)
+
 AVAILABLE_SCENES: dict[str, SceneConfig] = {
     "simple": SIMPLE_SCENE,
     "maze": MAZE_SCENE,
+    "room_with_objects": ROOM_WITH_OBJECTS_SCENE,
     "office": OFFICE_SCENE,
     "hospital": HOSPITAL_SCENE,
     "warehouse": WAREHOUSE_SCENE,

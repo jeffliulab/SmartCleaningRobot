@@ -1,12 +1,12 @@
-"""Build the 41-dim observation vector for the maze escape task.
+"""Build the 77-dim observation vector for the maze escape task.
 
 The observation is in **body frame** and matches the training environment:
   [0:2]   v_forward, omega              (body-frame velocity)
-  [2:38]  lidar (36 downsampled rays, normalized to [0,1])
-  [38:40] exit_dir_body (sin, cos)      (exit bearing in body frame)
-  [40]    exit_dist_norm                 (normalised distance to exit)
+  [2:74]  lidar (72 downsampled rays, normalized to [0,1])
+  [74:76] exit_dir_body (sin, cos)      (exit bearing in body frame)
+  [76]    exit_dist_norm                 (normalised distance to exit)
 
-This builder is separate from ObsBuilder (1066-dim cleaning task) to keep
+This builder is separate from ObsBuilder (1102-dim cleaning task) to keep
 the two tasks independent.
 """
 
@@ -20,9 +20,9 @@ import torch
 
 
 class MazeObsBuilder:
-    """Converts ROS sensor data into the 41-dim maze observation tensor."""
+    """Converts ROS sensor data into the 77-dim maze observation tensor."""
 
-    OBS_DIM = 41
+    OBS_DIM = 77
 
     def __init__(
         self,
@@ -30,7 +30,7 @@ class MazeObsBuilder:
         exit_y: float = -3.15,
         maze_diagonal: float = 5.7,
         lidar_num_rays: int = 360,
-        lidar_downsample_factor: int = 10,
+        lidar_downsample_factor: int = 5,
         lidar_max_distance: float = 3.5,
     ):
         self._exit = np.array([exit_x, exit_y], dtype=np.float32)
@@ -40,7 +40,7 @@ class MazeObsBuilder:
         self._expected_lidar = lidar_num_rays
 
         self._vel: Optional[np.ndarray] = None       # (v_fwd, omega)
-        self._lidar: Optional[np.ndarray] = None      # (36,)
+        self._lidar: Optional[np.ndarray] = None      # (72,)
         self._pose_x: float = 0.0
         self._pose_y: float = 0.0
         self._yaw: float = 0.0
@@ -76,7 +76,7 @@ class MazeObsBuilder:
         return self._vel is not None and self._lidar is not None
 
     def build(self) -> torch.Tensor:
-        """Assemble the 41-dim observation in body frame."""
+        """Assemble the 77-dim observation in body frame."""
         # Exit vector in world frame
         dx_w = self._exit[0] - self._pose_x
         dy_w = self._exit[1] - self._pose_y
@@ -98,10 +98,10 @@ class MazeObsBuilder:
 
         obs = np.concatenate([
             self._vel,           # 2
-            self._lidar,         # 36
+            self._lidar,         # 72
             exit_dir,            # 2
             exit_dist_norm,      # 1
-        ])                       # total = 41
+        ])                       # total = 77
 
         assert obs.shape[0] == self.OBS_DIM, f"obs dim mismatch: {obs.shape[0]} != {self.OBS_DIM}"
-        return torch.from_numpy(obs).unsqueeze(0)  # (1, 41)
+        return torch.from_numpy(obs).unsqueeze(0)  # (1, 77)

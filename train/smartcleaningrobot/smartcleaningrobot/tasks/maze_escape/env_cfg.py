@@ -29,9 +29,9 @@ class MazeEscapeEnvCfg(DirectRLEnvCfg):
     episode_length_s = 120.0
 
     # -- spaces --
-    # vel(2) + lidar(36) + exit_dir_body(2) + exit_dist(1) = 41
+    # vel(2) + lidar(72) + exit_dir_body(2) + exit_dist(1) = 77
     action_space = 2
-    observation_space = 41
+    observation_space = 77
     state_space = 0
 
     # -- simulation --
@@ -59,7 +59,7 @@ class MazeEscapeEnvCfg(DirectRLEnvCfg):
 
     # -- maze exit --
     exit_pos: tuple[float, float] = (0.0, -3.15)
-    exit_threshold: float = 0.3
+    exit_threshold: float = 0.5   # increased from 0.3: EXIT_CELL center=(0,-2.7), real exit=(0,-3.15), gap=0.45m
     maze_diagonal: float = 5.7
 
     # -- reward weights --
@@ -67,9 +67,9 @@ class MazeEscapeEnvCfg(DirectRLEnvCfg):
     rew_exit_bonus: float = 200.0
     rew_collision_penalty: float = -5.0
     rew_time_penalty: float = -0.05
-    rew_exploration: float = 0.5
-    rew_forward_bonus: float = 0.1
-    collision_threshold: float = 0.15
+    rew_exploration: float = 0.0   # 0: disabled — coverage-style exploration conflicts with maze escape objective
+    rew_forward_bonus: float = 0.3  # increased from 0.1: at v=0.3 forward net = +0.04/step vs -0.05 time
+    collision_threshold: float = 0.20  # increased from 0.15: corridor=0.45m wide, 0.15 triggers too late
 
     # -- spawn --
     randomize_spawn: bool = True
