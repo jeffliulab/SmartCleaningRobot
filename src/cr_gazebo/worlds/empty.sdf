@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<sdf version="1.9">
+  <!-- cr_gazebo 的空地世界（S1 入门用）。
+       ⚠️ world name 必须是 "default"：cr_description/config/gz_bridge.yaml 里
+       bumper 的桥接 topic 绑死了 /world/default/...（gz contact 传感器只发
+       自动 scoped 名，详见该文件注释与 docs/sim-bumpers.md）。
+       地面与光照全部内联，不拉 Gazebo Fuel 在线资产（课堂离线可跑）。 -->
+  <world name="default">
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-contact-system" name="gz::sim::systems::Contact"/>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <scene>
+      <ambient>0.6 0.6 0.6 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+    </scene>
+
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>50 50 0.1</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>50 50 0.1</size></box></geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+  </world>
+</sdf>

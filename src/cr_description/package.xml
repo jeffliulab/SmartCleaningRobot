@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://download.ros.org/schema/package_format3.xsd"?>
+<package format="3">
+  <name>cr_description</name>
+  <version>0.1.0</version>
+  <description>Cleaning Robot Series robot model: ~349mm disc differential-drive vacuum
+    robot with 2D LiDAR and front bumpers. Vendored from makerspet/oomwoo-one
+    (Apache-2.0) — see UPSTREAM.md for the pinned commit and what was trimmed.</description>
+
+  <maintainer email="jeff@example.com">Jeff</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>urdf</depend>
+  <exec_depend>xacro</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+
+  <test_depend>ament_cmake_pytest</test_depend>
+  <test_depend>python3-yaml</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

@@ -1,0 +1,35 @@
+# 用法（在 docker/ 目录下）：
+#   docker compose build          # 构建镜像（首次约 4–5 GB 下载）
+#   docker compose run --rm sim   # 进容器 bash（教学仓已挂载到 /ws/src/open-cleaning-robot）
+# 容器内：
+#   colcon build                  # 构建 cr_* 包
+#   source install/setup.bash
+#
+# GUI（Gazebo 画面 / RViz）：需要本机 X11；NVIDIA 下容器内渲染若异常，
+# 可改用 headless（gz sim -s -r 无界面）或给 compose 加 GPU 直通。
+services:
+  sim:
+    build:
+      context: .
+      # 构建走宿主机网络：本机 docker 默认桥接网络的 DNS（ISP 的）在容器里
+      # 什么域名都解析不动（2026-07-31 实测，连 TUNA 都 FAIL），而宿主机走
+      # Astrill VPN 的 DNS 一切正常。network: host 让构建期 RUN 直接用宿主机网络。
+      network: host
+      args:
+        # apt 源：国内构建用清华 TUNA（packages.ros.org 不可达、容器不走宿主机
+        # VPN 导致 archive.ubuntu.com 也解析失败，2026-07-31 实测）；
+        # 海外构建两个都改回官方：http://packages.ros.org/ros2/ubuntu 与
+        # http://archive.ubuntu.com/ubuntu
+        ROS_APT_REPO: https://mirrors.tuna.tsinghua.edu.cn/ros2/ubuntu
+        UBUNTU_APT_REPO: https://mirrors.tuna.tsinghua.edu.cn/ubuntu
+    image: open-cleaning-robot:jazzy
+    network_mode: host
+    ipc: host
+    environment:
+      - DISPLAY=${DISPLAY:-}
+      - QT_X11_NO_MITSHM=1
+      - GZ_SIM_SYSTEM_PLUGIN_PATH=/opt/ros/jazzy/lib
+    volumes:
+      - ../:/ws/src/open-cleaning-robot
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    working_dir: /ws

@@ -1,83 +1,41 @@
-# ============================================================
-# Isaac Lab Extension — SmartCleaningRobot
-# ============================================================
+# ---------- Open Cleaning Robot（ROS 2 教学仓）----------
 
-# ---------- Build / C++ ----------
-**/cmake-build*/
-**/build*/
-**/*.so
+# 本机内部开发笔记（永不入库，见工作区 CLAUDE.md 的两文件分工）
+CLAUDE.md
+.claude/
 
-# ---------- Omniverse ----------
-**/*.dmp
-**/.thumbs
-
-# ---------- USD (use Git LFS for large assets) ----------
-**/*.usd
-**/*.usda
-**/*.usdc
-**/*.usdz
+# ---------- ROS 2 / colcon ----------
+build/
+install/
+log/
 
 # ---------- Python ----------
-**/*.egg-info/
-**/__pycache__/
-**/.pytest_cache/
-**/*.pyc
-**/*.pb
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
 
-# ---------- macOS ----------
-.DS_Store
-
-# ---------- Docker / Singularity ----------
-**/*.sif
-docker/cluster/exports/
-docker/.container.cfg
-.isaac-lab-docker-history
-
-# ---------- IDE ----------
-**/.idea/
-**/.vscode/
-# Keep the top-level .vscode for shared settings
-!.vscode
-
-# ---------- Training outputs (all gitignored) ----------
+# ---------- 实验与运行产物（一律不入库） ----------
 **/output/*
 **/outputs/*
-**/videos/*
-**/wandb/*
-**/.neptune/*
 **/runs/*
 **/logs/*
-**/recordings/*
-*.tmp
+*.bag
+*.mcap
+rosbag*/
+*.pt
+*.pth
+*.onnx
 
-# ---------- Model checkpoints ----------
-**/*.pt
-**/*.pth
-**/*.onnx
-**/*.log*
+# ---------- 地图与生成物 ----------
+maps/
+generated/
 
-# ---------- Isaac Sim ----------
-_isaac_sim*
-_repo
-_build
-.lastformat
+# ---------- IDE / OS ----------
+.idea/
+**/.vscode/
+!.vscode
+.DS_Store
 
-# ---------- Datasets / checkpoints ----------
-/.pretrained_checkpoints/
-/datasets/
-
-# ---------- TacSL sensor ----------
-**/tactile_record/*
-**/gelsight_r15_data/*
-
-# ---------- Doc outputs ----------
-**/docs/_build/*
-**/generated/*
-
-# ---------- Tests ----------
-tests/
-
-# ---------- Deploy build artifacts ----------
-deploy/log/
-deploy/install/
-deploy/build/
+# ---------- 文档构建 ----------
+docs/_build/

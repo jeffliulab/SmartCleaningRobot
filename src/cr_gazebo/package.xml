@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://download.ros.org/schema/package_format3.xsd"?>
+<package format="3">
+  <name>cr_gazebo</name>
+  <version>0.1.0</version>
+  <description>Cleaning Robot Series: Gazebo Harmonic worlds and cleaning-score tooling.</description>
+  <maintainer email="jeff@example.com">Jeff</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
