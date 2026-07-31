@@ -29,6 +29,8 @@
 
     <model name="ground_plane">
       <static>true</static>
+      <!-- 盒子中心压到 -0.05，让地面上表面正好在 z=0（否则机器人陷地 5cm） -->
+      <pose>0 0 -0.05 0 0 0</pose>
       <link name="link">
         <collision name="collision">
           <geometry><box><size>50 50 0.1</size></box></geometry>

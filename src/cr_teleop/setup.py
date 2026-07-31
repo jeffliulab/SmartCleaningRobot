@@ -19,6 +19,8 @@ setup(
     entry_points={
         "console_scripts": [
             "square_drive = cr_teleop.square_drive:main",
+            "scan_inspector = cr_teleop.scan_inspector:main",
+            "bag_odom_report = cr_teleop.bag_odom_report:main",
         ],
     },
 )

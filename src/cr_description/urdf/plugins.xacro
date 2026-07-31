@@ -83,8 +83,13 @@
 
   <!-- gazebo reference="laser_frame" -->
   <gazebo reference="base_scan">
+    <!-- ⛔ 教学仓注记（与上游一致用 gpu_lidar，2026-07-31 实证）：
+         gz-sim Harmonic 根本没有 CPU 激光——type="lidar" 报
+         "Sensor type LIDAR not supported yet. Try using a GPU LIDAR instead"（静默不出数），
+         type="ray" 是 Classic 时代名字同样不认。所以激光只能 gpu_lidar。
+         无 GPU 的 headless 容器里走软件渲染（llvmpipe），慢但读数正确（见 E2 实测记录）。
+         ⚠️ 别再把类型改成 ray/lidar。 -->
     <sensor name="laser_scan_sensor" type="gpu_lidar">
-    <!-- sensor type="ray" name="laser_scan_sensor" -->
       <pose relative_to="base_scan"> 0 0 0 0 0 0 </pose>
       <update_rate>5</update_rate>
       <topic>scan</topic>
