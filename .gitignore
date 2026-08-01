@@ -39,3 +39,10 @@ generated/
 
 # ---------- 文档构建 ----------
 docs/_build/
+
+# ---------- 临时物与运行残渣 ----------
+# 中间文件一律放工作区根 temp/（见工作区 AGENTS.md），仓内不留
+temp/
+MUJOCO_LOG.TXT
+node_modules/
+.venv/
