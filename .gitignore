@@ -41,7 +41,7 @@ generated/
 docs/_build/
 
 # ---------- 临时物与运行残渣 ----------
-# 中间文件一律放工作区根 temp/（见工作区 AGENTS.md），仓内不留
+# 中间文件放本仓自己的 temp/（2026-08-02 起工作区根不再设 temp/；见工作区 CLAUDE.md 要点 4）
 temp/
 MUJOCO_LOG.TXT
 node_modules/
